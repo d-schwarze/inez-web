@@ -1,0 +1,10 @@
+Manifest-Version: 1.0
+Implementation-Title: INEZ
+Implementation-Version: 0.0.1-SNAPSHOT
+Built-By: David
+Implementation-Vendor-Id: de.david
+Build-Jdk: 1.8.0_112
+Implementation-URL: https://projects.spring.io/spring-boot/#/spring-bo
+ ot-starter-parent/inez
+Created-By: Maven Integration for Eclipse
+

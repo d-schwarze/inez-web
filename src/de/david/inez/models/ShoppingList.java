@@ -7,6 +7,8 @@ public class ShoppingList {
 
 	private long id;
 	
+	private String userId;
+	
 	private Date date;
 	
 	private Subsidiary subsidiary;
@@ -14,7 +16,6 @@ public class ShoppingList {
 	private List<Entry> entries;
 	
 	public ShoppingList() {
-		
 		
 		
 	}
@@ -49,5 +50,13 @@ public class ShoppingList {
 
 	public void setEntries(List<Entry> entries) {
 		this.entries = entries;
+	}
+
+	public String getUserId() {
+		return userId;
+	}
+
+	public void setUserId(String userId) {
+		this.userId = userId;
 	}
 }

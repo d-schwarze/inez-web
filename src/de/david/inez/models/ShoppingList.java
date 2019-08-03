@@ -1,18 +1,33 @@
 package de.david.inez.models;
 
-import java.sql.Date;
+import java.time.LocalDate;
 import java.util.List;
 
+import javax.persistence.CascadeType;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.OneToMany;
+import javax.persistence.OneToOne;
+
+@Entity
 public class ShoppingList {
 
+	@Id
+	@GeneratedValue(strategy = GenerationType.AUTO)
 	private long id;
 	
 	private String userId;
 	
-	private Date date;
+	private LocalDate date;
 	
+	@OneToOne
+	@JoinColumn(name = "SUBSIDIARY_ ID")
 	private Subsidiary subsidiary;
 	
+	@OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
 	private List<Entry> entries;
 	
 	public ShoppingList() {
@@ -28,11 +43,11 @@ public class ShoppingList {
 		this.id = id;
 	}
 
-	public Date getDate() {
+	public LocalDate getDate() {
 		return date;
 	}
 
-	public void setDate(Date date) {
+	public void setDate(LocalDate date) {
 		this.date = date;
 	}
 

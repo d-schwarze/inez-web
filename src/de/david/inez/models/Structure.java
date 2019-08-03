@@ -1,21 +1,35 @@
 package de.david.inez.models;
 
+import java.util.ArrayDeque;
 import java.util.LinkedList;
 import java.util.Queue;
 
+import javax.persistence.CascadeType;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.OneToMany;
+
+@Entity
 public class Structure {
 	
-	private Queue<Group> orderedGroupsRoute = new LinkedList<Group>();
+	@Id
+	@GeneratedValue(strategy = GenerationType.AUTO)
+	private long id;
+	
+	@OneToMany(cascade = CascadeType.ALL)
+	private ArrayDeque<Group> orderedGroupsRoute = new ArrayDeque<Group>();
 	
 	public Structure() {
 		
 	}
 
-	public Queue<Group> getOrderedGroupsRoute() {
+	public ArrayDeque<Group> getOrderedGroupsRoute() {
 		return orderedGroupsRoute;
 	}
 
-	public void setOrderedGroupsRoute(Queue<Group> orderedGroupsRoute) {
+	public void setOrderedGroupsRoute(ArrayDeque<Group> orderedGroupsRoute) {
 		this.orderedGroupsRoute = orderedGroupsRoute;
 	}
 

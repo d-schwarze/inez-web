@@ -1,20 +1,30 @@
 package de.david.inez.models;
 
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.OneToOne;
+
+@Entity
 public class Subsidiary {
 
+	@Id
+	@GeneratedValue(strategy = GenerationType.AUTO)
 	private long id;
 	
+	@OneToOne
+	@JoinColumn(name = "LOCATION_ID")
 	private Location location;
 	
 	private String name;
 	
+	@OneToOne
+	@JoinColumn(name = "STUCTURE_ID")
 	private Structure structure;
 	
-	public Subsidiary() {
-		
-			
-		
-	}
+	public Subsidiary() { }
 
 	public long getId() {
 		return id;

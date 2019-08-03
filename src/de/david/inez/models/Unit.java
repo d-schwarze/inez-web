@@ -6,15 +6,15 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 
 @Entity
-public class Group {
-	
+public class Unit {
+
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO)
 	private long id;
 	
 	private String name;
 	
-	public Group() { }
+	public Unit() { }
 
 	public long getId() {
 		return id;
@@ -32,14 +32,3 @@ public class Group {
 		this.name = name;
 	}
 }
-
-
-
-
-
-/*
-public enum Group2 {
-
-	VEGETABLES_FRUITS, WINE, REFRIGERATED_SHELF, MEAT, LAUNDRY, DRINKS, WASHING
-	
-}*/

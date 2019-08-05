@@ -30,6 +30,8 @@ public class ShoppingList {
 	@OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
 	private List<Entry> entries;
 	
+	private boolean pinned = false;
+	
 	public ShoppingList() {
 		
 		
@@ -73,5 +75,13 @@ public class ShoppingList {
 
 	public void setUserId(String userId) {
 		this.userId = userId;
+	}
+
+	public boolean isPinned() {
+		return pinned;
+	}
+
+	public void setPinned(boolean pinned) {
+		this.pinned = pinned;
 	}
 }

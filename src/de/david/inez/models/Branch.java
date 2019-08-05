@@ -8,7 +8,7 @@ import javax.persistence.JoinColumn;
 import javax.persistence.OneToOne;
 
 @Entity
-public class Subsidiary {
+public class Branch {
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO)
@@ -24,7 +24,7 @@ public class Subsidiary {
 	@JoinColumn(name = "STUCTURE_ID")
 	private Structure structure;
 	
-	public Subsidiary() { }
+	public Branch() { }
 
 	public long getId() {
 		return id;

@@ -19,7 +19,7 @@ import de.david.inez.models.Product;
 import de.david.inez.services.ProductService;
 
 @RestController
-@RequestMapping("/products/")
+@RequestMapping("/products")
 public class ProductController {
 
 	@Autowired
@@ -33,7 +33,7 @@ public class ProductController {
 		
 	}
 	
-	@GetMapping(path = "/listed/" ,produces = "application/json;charset=UTF-8") 
+	@GetMapping(path = "/listed" ,produces = "application/json;charset=UTF-8") 
 	@ResponseBody
 	public List<ListedProduct> getListedProducts() {
 		
@@ -41,7 +41,7 @@ public class ProductController {
 		
 	}
 	
-	@GetMapping(path = "/unlisted/" ,produces = "application/json;charset=UTF-8") 
+	@GetMapping(path = "/unlisted" ,produces = "application/json;charset=UTF-8") 
 	@ResponseBody
 	public List<Product> getUnlistedProducts() {
 		

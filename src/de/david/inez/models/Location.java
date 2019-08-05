@@ -18,6 +18,13 @@ public class Location {
 
 	public Location() { }
 	
+	public Location(double lat, double lng) {
+		
+		this.lat = lat;
+		this.lng = lng;
+		
+	}
+
 	public long getId() {
 		return id;
 	}

@@ -25,7 +25,7 @@ public class ShoppingList {
 	
 	@OneToOne
 	@JoinColumn(name = "SUBSIDIARY_ ID")
-	private Subsidiary subsidiary;
+	private Branch branch;
 	
 	@OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
 	private List<Entry> entries;
@@ -51,12 +51,12 @@ public class ShoppingList {
 		this.date = date;
 	}
 
-	public Subsidiary getSubsidiary() {
-		return subsidiary;
+	public Branch getBranch() {
+		return branch;
 	}
 
-	public void setSubsidiary(Subsidiary subsidiary) {
-		this.subsidiary = subsidiary;
+	public void setBranch(Branch branch) {
+		this.branch = branch;
 	}
 
 	public List<Entry> getEntries() {

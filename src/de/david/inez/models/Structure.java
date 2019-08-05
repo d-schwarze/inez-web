@@ -1,8 +1,6 @@
 package de.david.inez.models;
 
 import java.util.ArrayDeque;
-import java.util.LinkedList;
-import java.util.Queue;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Entity;

@@ -1,7 +1,5 @@
 package de.david.inez.models;
 
-import java.util.ArrayDeque;
-
 import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -10,19 +8,25 @@ import javax.persistence.Id;
 import javax.persistence.OneToOne;
 
 @Entity
-public class Structure {
-	
+public class OrderedGroup {
+
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO)
 	private long id;
 	
-	@OneToOne(cascade = CascadeType.ALL)
-	private OrderedGroups orderedGroups;
+	private int orderNumber;
 	
-	public Structure() {
+	@OneToOne
+	private Group group;
+
+	public OrderedGroup() { }
+
+	public void increaseOrderNumber() {
+		
+		this.orderNumber++;
 		
 	}
-
+	
 	public long getId() {
 		return id;
 	}
@@ -31,11 +35,19 @@ public class Structure {
 		this.id = id;
 	}
 
-	public OrderedGroups getOrderedGroups() {
-		return orderedGroups;
+	public int getOrderNumber() {
+		return orderNumber;
 	}
 
-	public void setOrderedGroups(OrderedGroups orderedGroups) {
-		this.orderedGroups = orderedGroups;
+	public void setOrderNumber(int orderNumber) {
+		this.orderNumber = orderNumber;
 	}
+
+	public Group getGroup() {
+		return group;
+	}
+
+	public void setGroup(Group group) {
+		this.group = group;
+	}	
 }

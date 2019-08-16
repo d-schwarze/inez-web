@@ -24,7 +24,7 @@ public class ShoppingList {
 	private LocalDate date;
 	
 	@OneToOne
-	@JoinColumn(name = "SUBSIDIARY_ ID")
+	@JoinColumn(name = "SUBSIDIARY_ID")
 	private Branch branch;
 	
 	@OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)

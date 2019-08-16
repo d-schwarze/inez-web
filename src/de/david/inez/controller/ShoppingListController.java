@@ -32,7 +32,7 @@ public class ShoppingListController {
 		
 	}
 	
-	@GetMapping(produces = "application/json;charset=UTF-8") 
+	@GetMapping(produces = "application/json;charset=UTF-8", params = { "user" }) 
 	@ResponseBody
 	public List<ShoppingList> getAllShoppingLists(@PathParam("user") String userId) {
 		
@@ -40,7 +40,7 @@ public class ShoppingListController {
 		
 	}
 	
-	@GetMapping(path = "/id/{id}", produces = "application/json;charset=UTF-8") 
+	@GetMapping(path = "/{id}", produces = "application/json;charset=UTF-8") 
 	@ResponseBody
 	public ShoppingList getShoppingList(@PathVariable("id") long id) {
 		
@@ -48,7 +48,7 @@ public class ShoppingListController {
 		
 	}
 	
-	@GetMapping(path = "/id/{id}", produces = "application/json;charset=UTF-8") 
+	@GetMapping(path = "/{id}", produces = "application/json;charset=UTF-8", params = { "user" }) 
 	@ResponseBody
 	public ShoppingList getShoppingListByUser(@PathVariable("id") long id, @PathParam("user") String userId) {
 		
@@ -63,7 +63,7 @@ public class ShoppingListController {
 		
 	}
 	
-	@DeleteMapping(path = "/id/{id}")
+	@DeleteMapping(path = "/{id}")
 	public void removeShoppingList(@PathVariable("id") long id) {
 		
 		shoppingListService.removeShoppingList(id);

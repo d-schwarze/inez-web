@@ -1,9 +1,11 @@
 package de.david.inez.controller;
 
 import java.util.List;
+import java.util.logging.Logger;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -24,6 +26,7 @@ public class LocationController {
 	@Autowired
 	private LocationRepository locationRepository;
 	
+	@CrossOrigin
 	@GetMapping
 	public List<Location> getLocations() {
 		
@@ -46,10 +49,11 @@ public class LocationController {
 		
 	}
 	
+	@CrossOrigin
 	@PostMapping(path = {"/add", "/update"})
 	@ResponseStatus(HttpStatus.CREATED)
 	public void addLocation(@RequestBody Location location) {
-		
+		System.out.println(location.getLat() + " " + location.getLng());
 		locationRepository.save(location);
 		
 	}

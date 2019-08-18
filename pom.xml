@@ -7,9 +7,9 @@
     <relativePath/> <!-- lookup parent from repository -->
   </parent>
   <groupId>de.david</groupId>
-  <artifactId>inez</artifactId>
+  <artifactId>inezb</artifactId>
   <version>0.0.1-SNAPSHOT</version>
-  <packaging>war</packaging>
+  <packaging>pom</packaging>
   <name>INEZ</name>
   <description>INEZ shopping list manager for EDEKA.</description>
   

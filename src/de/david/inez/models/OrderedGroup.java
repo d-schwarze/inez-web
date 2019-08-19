@@ -17,7 +17,7 @@ public class OrderedGroup {
 	private int orderNumber;
 	
 	@OneToOne
-	private Group group;
+	private ProductGroup productGroup;
 
 	public OrderedGroup() { }
 
@@ -43,11 +43,11 @@ public class OrderedGroup {
 		this.orderNumber = orderNumber;
 	}
 
-	public Group getGroup() {
-		return group;
+	public ProductGroup getGroup() {
+		return productGroup;
 	}
 
-	public void setGroup(Group group) {
-		this.group = group;
+	public void setGroup(ProductGroup productGroup) {
+		this.productGroup = productGroup;
 	}	
 }

@@ -17,7 +17,7 @@ public class Structure {
 	private long id;
 	
 	@OneToOne(cascade = CascadeType.ALL)
-	private OrderedGroups orderedGroups;
+	private OrderedGrouping orderedGrouping;
 	
 	public Structure() {
 		
@@ -31,11 +31,11 @@ public class Structure {
 		this.id = id;
 	}
 
-	public OrderedGroups getOrderedGroups() {
-		return orderedGroups;
+	public OrderedGrouping getOrderedGrouping() {
+		return orderedGrouping;
 	}
 
-	public void setOrderedGroups(OrderedGroups orderedGroups) {
-		this.orderedGroups = orderedGroups;
+	public void setOrderedGrouping(OrderedGrouping orderedGrouping) {
+		this.orderedGrouping = orderedGrouping;
 	}
 }

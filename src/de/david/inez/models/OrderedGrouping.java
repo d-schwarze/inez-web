@@ -11,16 +11,16 @@ import javax.persistence.Id;
 import javax.persistence.OneToMany;
 
 @Entity
-public class OrderedGroups {
+public class OrderedGrouping {
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO)
 	private long id;
 	
 	@OneToMany(cascade = CascadeType.ALL)
-	private List<OrderedGroup> orderedGroupsList = new ArrayList<>();
+	private List<OrderedGroup> orderedGroups = new ArrayList<>();
 	
-	public OrderedGroups() {
+	public OrderedGrouping() {
 		
 	}
 	
@@ -42,17 +42,17 @@ public class OrderedGroups {
 	
 	public void addOrderedGroupToLastPosition(OrderedGroup orderedGroup) {
 		
-		int newOrderNumber = this.orderedGroupsList.size();
+		int newOrderNumber = this.orderedGroups.size();
 		
 		orderedGroup.setOrderNumber(newOrderNumber);
 		
-		this.orderedGroupsList.add(orderedGroup);
+		this.orderedGroups.add(orderedGroup);
 		
 	}
 	
 	private void insertOrderdGroup(OrderedGroup orderedGroup) {
 		
-		for(OrderedGroup og : orderedGroupsList) {
+		for(OrderedGroup og : orderedGroups) {
 			
 			if(og.getOrderNumber() >= orderedGroup.getOrderNumber()) {
 				
@@ -62,19 +62,19 @@ public class OrderedGroups {
 			
 		}
 		
-		this.orderedGroupsList.add(orderedGroup);
+		this.orderedGroups.add(orderedGroup);
 		
 	}
 	
 	public boolean containsOrderedGroup(OrderedGroup orderedGroup) {
 		
-		return orderedGroupsList.stream().anyMatch(og -> og.getId() == orderedGroup.getId());
+		return orderedGroups.stream().anyMatch(og -> og.getId() == orderedGroup.getId());
 		
 	}
 	
 	public boolean isOrderNumberInUse(int orderNumber) {
 		
-		return orderedGroupsList.stream().anyMatch(og -> og.getOrderNumber() == orderNumber);
+		return orderedGroups.stream().anyMatch(og -> og.getOrderNumber() == orderNumber);
 		
 	}
 
@@ -87,10 +87,10 @@ public class OrderedGroups {
 	}
 
 	public List<OrderedGroup> getOrderedGroups() {
-		return orderedGroupsList;
+		return orderedGroups;
 	}
 
 	public void setOrderedGroups(List<OrderedGroup> orderedGroups) {
-		this.orderedGroupsList = orderedGroups;
+		this.orderedGroups = orderedGroups;
 	}	
 }

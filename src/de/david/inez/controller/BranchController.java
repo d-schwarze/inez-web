@@ -4,6 +4,7 @@ import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -28,6 +29,7 @@ public class BranchController {
 	private BranchService branchService;
 	
 	
+	@CrossOrigin
 	@GetMapping(produces = "application/json;charset=UTF-8")
 	@ResponseBody
 	public List<Branch> getBranches() {
@@ -36,7 +38,7 @@ public class BranchController {
 		
 	}
 	
-	@GetMapping(path = "/id/{id}", produces = "application/json;charset=UTF-8") 
+	@GetMapping(path = "/{id}", produces = "application/json;charset=UTF-8") 
 	@ResponseBody
 	public Branch getBranch(@PathVariable("id") long id) {
 		
@@ -44,7 +46,7 @@ public class BranchController {
 		
 	}
 	
-	@DeleteMapping("/id/{id}")
+	@DeleteMapping("/{id}")
 	@ResponseBody
 	@ResponseStatus(HttpStatus.OK)
 	public void removeBranch(@PathVariable("id") long id) {
@@ -53,6 +55,7 @@ public class BranchController {
 		
 	}
 	
+	@CrossOrigin
 	@PostMapping(path = { "/add", "/update" })
 	@ResponseStatus(HttpStatus.OK)
 	public void addBranch(@RequestBody Branch branch) {

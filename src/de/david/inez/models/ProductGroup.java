@@ -5,16 +5,16 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 
-@Entity(name = "DB_GROUP")
-public class Group {
+@Entity
+public class ProductGroup {
 	
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO)
 	private long id;
 	
-	private String name;
+	private String designation;
 	
-	public Group() { }
+	public ProductGroup() { }
 
 	public long getId() {
 		return id;
@@ -24,12 +24,12 @@ public class Group {
 		this.id = id;
 	}
 
-	public String getName() {
-		return name;
+	public String getDesignation() {
+		return designation;
 	}
 
-	public void setName(String name) {
-		this.name = name;
+	public void setDesignation(String designation) {
+		this.designation = designation;
 	}
 }
 

@@ -21,8 +21,8 @@ public class Product {
 	private String name;
 	
 	@OneToOne(cascade = CascadeType.ALL)
-	@JoinColumn(name="GROUP_ID")
-	private Group group;
+	@JoinColumn(name="PRODUCTGROUP_ID")
+	private ProductGroup productGroup;
 	
 	@OneToOne(cascade = CascadeType.ALL)
 	@JoinColumn(name="UNIT_ID")

@@ -7,16 +7,17 @@ import org.springframework.stereotype.Service;
 
 import de.david.inez.models.ListedProduct;
 import de.david.inez.models.Product;
+import de.david.inez.repositories.ListedProductRepository;
 import de.david.inez.repositories.ProductRepository;
 
 @Service
 public class ProductServiceImpl implements ProductService {
 
 	@Autowired
-	private ProductRepository<Product> productRepository;
+	private ProductRepository productRepository;
 	
 	@Autowired
-	private ProductRepository<ListedProduct> listedProductRepository;
+	private ListedProductRepository listedProductRepository;
 	
 	@Override
 	public List<Product> getAllProducts() {
@@ -30,7 +31,9 @@ public class ProductServiceImpl implements ProductService {
 		
 		List<Product> allProducts = productRepository.findAll();
 		
-		allProducts.removeIf(p -> p instanceof ListedProduct);
+		List<ListedProduct> listedProducts = listedProductRepository.findAll();
+		
+		allProducts.removeAll(listedProducts);
 		
 		return allProducts;
 		

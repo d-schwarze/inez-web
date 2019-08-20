@@ -22,13 +22,4 @@ public class Application {
         log.info("Spring boot started.");
         
     }
-    
-    public WebMvcConfigurer corsConfigurer() {
-        return new WebMvcConfigurer() {
-            @Override
-            public void addCorsMappings(CorsRegistry registry) {
-                registry.addMapping("/**").allowedOrigins("*").allowedMethods("*").allowedHeaders("*");
-            }
-        };
-    }
 }

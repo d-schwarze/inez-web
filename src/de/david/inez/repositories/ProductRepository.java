@@ -6,6 +6,6 @@ import org.springframework.data.repository.NoRepositoryBean;
 import de.david.inez.models.Product;
 
 
-public interface ProductRepository<T extends Product> extends JpaRepository<T, Long> {
+public interface ProductRepository extends JpaRepository<Product, Long> {
 
 }

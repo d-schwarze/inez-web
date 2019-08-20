@@ -4,6 +4,7 @@ import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -18,6 +19,7 @@ import de.david.inez.models.ListedProduct;
 import de.david.inez.models.Product;
 import de.david.inez.services.ProductService;
 
+@CrossOrigin
 @RestController
 @RequestMapping("/products")
 public class ProductController {
@@ -65,7 +67,7 @@ public class ProductController {
 		
 	}
 	
-	@DeleteMapping("/id/{id}")
+	@DeleteMapping("/{id}")
 	@ResponseStatus(HttpStatus.OK)
 	public void deleteProduct(@PathVariable("id") long id) {
 		
@@ -73,7 +75,7 @@ public class ProductController {
 		
 	}
 	
-	@GetMapping("/id/{id}")
+	@GetMapping("/{id}")
 	@ResponseBody
 	public Product getProduct(@PathVariable("id") long id) {
 		
@@ -81,7 +83,7 @@ public class ProductController {
 		
 	}
 	
-	@GetMapping(path = "/listed/id/{id}", produces = "application/json;charset=UTF-8") 
+	@GetMapping(path = "/listed/{id}", produces = "application/json;charset=UTF-8") 
 	@ResponseBody
 	public ListedProduct getListedProduct(@PathVariable("id") long id) {
 		

@@ -2,6 +2,7 @@ package de.david.inez.models;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -20,11 +21,11 @@ public class Product {
 	
 	private String name;
 	
-	@OneToOne(cascade = CascadeType.ALL)
+	@OneToOne
 	@JoinColumn(name="PRODUCTGROUP_ID")
 	private ProductGroup productGroup;
 	
-	@OneToOne(cascade = CascadeType.ALL)
+	@OneToOne
 	@JoinColumn(name="UNIT_ID")
 	private Unit unit;
 	
@@ -46,5 +47,21 @@ public class Product {
 
 	public void setName(String name) {
 		this.name = name;
+	}
+
+	public ProductGroup getProductGroup() {
+		return productGroup;
+	}
+
+	public void setProductGroup(ProductGroup productGroup) {
+		this.productGroup = productGroup;
+	}
+
+	public Unit getUnit() {
+		return unit;
+	}
+
+	public void setUnit(Unit unit) {
+		this.unit = unit;
 	}
 }

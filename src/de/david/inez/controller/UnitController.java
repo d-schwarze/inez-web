@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import de.david.inez.models.Unit;
 import de.david.inez.repositories.UnitRepository;
+import de.david.inez.repositories.UnitSystemRepository;
 
 @RestController
 @RequestMapping("/units")
@@ -23,6 +24,9 @@ public class UnitController {
 
 	@Autowired
 	private UnitRepository unitRepository;
+	
+	@Autowired
+	private UnitSystemRepository unitSystemRepository;
 	
 	
 	@GetMapping
@@ -58,6 +62,9 @@ public class UnitController {
 	public void addUnitToUnitSystem(@RequestBody Unit unit, @RequestParam("unitSystem") long unitSystemId) {
 		
 		unitRepository.save(unit);
+		
+		unitSystemRepository.
+		
 		
 	}
 	

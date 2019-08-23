@@ -53,4 +53,12 @@ public class UnitController {
 		unitRepository.save(unit);
 		
 	}
+	
+	@PostMapping("/add")
+	public void addUnitToUnitSystem(@RequestBody Unit unit, @RequestParam("unitSystem") long unitSystemId) {
+		
+		unitRepository.save(unit);
+		
+	}
+	
 }

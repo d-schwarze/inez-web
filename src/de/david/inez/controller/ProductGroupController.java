@@ -52,7 +52,7 @@ public class ProductGroupController {
 	@PostMapping(path = {"/add", "/update"})
 	@ResponseStatus(HttpStatus.CREATED)
 	public void addProductGroup(@RequestBody ProductGroup productGroup) {
-		System.out.println(productGroup.getDesignation());
+		
 		productGroupRepository.save(productGroup);
 		
 	}

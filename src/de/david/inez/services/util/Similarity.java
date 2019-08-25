@@ -2,25 +2,27 @@ package de.david.inez.services.util;
 
 public class Similarity<T> {
 
-	private T value;
+	private T model;
 	
-	private double likeness;
+	private double rating;
 	
 	public Similarity() { }
 
-	public T getValue() {
-		return value;
+	public double getRating() {
+		return rating;
 	}
 
-	public void setValue(T value) {
-		this.value = value;
+	public void setRating(double rating) {
+		this.rating = rating;
 	}
 
-	public double getLikeness() {
-		return likeness;
+
+	public T getModel() {
+		return model;
 	}
 
-	public void setLikeness(double likeness) {
-		this.likeness = likeness;
+
+	public void setModel(T model) {
+		this.model = model;
 	}
 }

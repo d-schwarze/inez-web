@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.function.Function;
 import java.util.function.Supplier;
+import java.util.stream.Collectors;
 
 import de.david.inez.services.util.Similarity;
 
@@ -13,26 +14,104 @@ public class SimilarityServiceImpl implements SimilarityService {
 	public <T> List<Similarity<T>> getSimilarities(String value, List<T> compareableList,
 			Function<T, String> getCompareableValue) {
 		
+		List<Similarity<T>> similarities = new ArrayList<>();
+		
 		for(T model : compareableList) {
 			
-			String compareableValue = getCompareableValue.apply(model);
+			Similarity<T> similarity = this.getSimiliarty(value, model, getCompareableValue);
+			
+			similarities.add(similarity);
 			
 		}
 		
-		return null;
+		return similarities;
+	}
+	
+	@Override
+	public <T> List<Similarity<T>> getSortedSimilarities(String value, List<T> compareableList,
+			Function<T, String> getCompareableValue) {
+		
+		List<Similarity<T>> similarities = this.getSimilarities(value, compareableList, getCompareableValue);
+		
+		similarities.sort((Similarity<T> m1, Similarity<T> m2) -> {
+			
+			if(m1.getRating() > m2.getRating()) return 1;
+			
+			if(m1.getRating() == m2.getRating()) return 0;
+			
+			return -1;
+			
+		});
+		
+		return similarities;
 	}
 
 	@Override
 	public <T> List<Similarity<T>> getHighestSimilarites(String value, List<T> compareableList,
-			Supplier<T> compareableValue, int maxAmount) {
-		// TODO Auto-generated method stub
-		return null;
+			Function<T, String> getCompareableValue, int maxAmount) {
+		
+		List<Similarity<T>> sortedSimilarities = this.getSortedSimilarities(value, compareableList, getCompareableValue);
+		
+		if(sortedSimilarities.size() == 0 || maxAmount == 0) return sortedSimilarities;
+		
+		int toIndex = sortedSimilarities.size() >= maxAmount ? (maxAmount - 1) : (sortedSimilarities.size() - 1);
+		
+		return sortedSimilarities.subList(0, toIndex);
+		
+	}
+	
+	@Override
+	public <T> Similarity<T> getHighestSimilarity(String value, List<T> compareableList,
+			Function<T, String> getCompareableValue) {
+		
+		List<Similarity<T>> sortedSimilarities = this.getSortedSimilarities(value, compareableList, getCompareableValue);
+		
+		if(sortedSimilarities.size() != 0)
+			return sortedSimilarities.get(0);
+		
+		throw new IndexOutOfBoundsException("0 similarities were found. Getting the hightest similarity is not possible.");
+		
 	}
 
 	@Override
-	public <T> Similarity<T> getSimiliarty(String value, String compareableValue) {
-		// TODO Auto-generated method stub
-		return null;
+	public <T> Similarity<T> getSimiliarty(String value, T compareableModel, Function<T, String> getCompareableValue) {
+		
+		Similarity<T> similarity = new Similarity<>();
+		
+		similarity.setModel(compareableModel);
+		
+		similarity.setRating(this.generateSimiliarityRating(value, getCompareableValue.apply(compareableModel)));
+		
+		return similarity;
+		
+	}
+	
+	@Override
+	public double generateSimiliarityRating(String value, String compareableValue) {
+		
+		if(this.equals(value, compareableValue)) return 100.00;
+		
+		double rating = 0.0;
+		
+		rating += 30 * (this.getAmountOfEqualLetters(value, compareableValue) / value.length()); 
+		
+		rating += 60 * (this.generateStrSequencesRating(value, this.getEqualStrSequences(value, compareableValue)));
+		
+		rating += 10 * (this.getLongestEqualStrSequence(value, compareableValue).length() / value.length());
+		
+		return rating;
+	}
+	
+	private double generateStrSequencesRating(String value, List<String> strSequences) {
+		
+		if(strSequences.size() == 0) return 0.0;
+		
+		int strSequencesSizeMultiplication = strSequences.stream().mapToInt(s -> s.length()).reduce(1, Math::multiplyExact);
+		
+		double rating = 1 - (strSequences.size() / strSequencesSizeMultiplication);
+		
+		return rating;
+		
 	}
 
 	@Override
@@ -62,7 +141,15 @@ public class SimilarityServiceImpl implements SimilarityService {
 		
 		List<String> strSequences = getEqualStrSequences(value, compareableValue);
 		
-		return null;
+		return strSequences.stream().max((String s1, String s2) -> {
+			
+			if(s1.length() > s2.length()) return 1;
+			
+			if(s1.length() == s2.length()) return 0;
+			
+			return -1;
+			
+		}).orElse("");
 	}
 
 	@Override
@@ -140,12 +227,5 @@ public class SimilarityServiceImpl implements SimilarityService {
 			return list.indexOf(str) != list.lastIndexOf(str);
 			
 		});
-	}
-
-	@Override
-	public <T> Similarity<T> getHighestSimilarity(String value, List<T> compareableList, Supplier<T> compareableValue,
-			int maxAmount) {
-		// TODO Auto-generated method stub
-		return null;
 	}
 }

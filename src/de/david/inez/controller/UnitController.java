@@ -14,7 +14,9 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
+import de.david.inez.models.SpecialUnit;
 import de.david.inez.models.Unit;
+import de.david.inez.models.UnitSystem;
 import de.david.inez.repositories.UnitRepository;
 import de.david.inez.repositories.UnitSystemRepository;
 
@@ -60,12 +62,23 @@ public class UnitController {
 	
 	@PostMapping("/add")
 	public void addUnitToUnitSystem(@RequestBody Unit unit, @RequestParam("unitSystem") long unitSystemId) {
+			
+		UnitSystem us = unitSystemRepository.findById(unitSystemId).get();
 		
-		unitRepository.save(unit);
+		us.addUnit(unit);
 		
-		unitSystemRepository.
-		
+		unitSystemRepository.save(us);
 		
 	}
 	
+	@PostMapping("/add")
+	public void addUnitToUnitSystem(@RequestBody SpecialUnit specialUnit, @RequestParam("unitSystem") long unitSystemId) {
+		
+		UnitSystem us = unitSystemRepository.findById(unitSystemId).get();
+		
+		us.addSpecialUnit(specialUnit);
+		
+		unitSystemRepository.save(us);
+		
+	}
 }

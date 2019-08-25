@@ -53,4 +53,17 @@ public class SpecialUnit {
 	public void setFactor(double factor) {
 		this.factor = factor;
 	}
+	
+	@Override
+	public boolean equals(Object otherSpecialUnit) {
+		
+		if(!(otherSpecialUnit instanceof SpecialUnit)) return false;
+		
+		if(otherSpecialUnit == this) return true;
+		
+		if(((SpecialUnit) otherSpecialUnit).getId() == this.id) return true;
+		
+		return false;
+		
+	}
 }

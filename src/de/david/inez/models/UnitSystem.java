@@ -31,6 +31,20 @@ public class UnitSystem {
 	public UnitSystem() {
 		
 	}
+	
+	public void addUnit(Unit unit) {
+		
+		if(!this.units.contains(unit))
+			this.units.add(unit);
+		
+	}
+	
+	public void addSpecialUnit(SpecialUnit specialUnit) {
+		
+		if(!this.specialUnits.contains(specialUnit))
+			this.specialUnits.add(specialUnit);
+		
+	}
 
 	public long getId() {
 		return id;

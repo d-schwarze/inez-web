@@ -65,4 +65,17 @@ public class Unit {
 		
 		this.preferedName = preferedName;
 	}
+	
+	@Override
+	public boolean equals(Object otherUnit) {
+		
+		if(!(otherUnit instanceof Unit)) return false;
+		
+		if(otherUnit == this) return true;
+		
+		if(((Unit) otherUnit).getId() == this.id) return true;
+		
+		return false;
+		
+	}
 }

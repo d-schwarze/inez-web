@@ -20,8 +20,8 @@ public interface SimilarityService {
 	
 	public int getAmountOfEqualLetters(String value, String compareableValue);
 	
-	public CharSequence getLongestEqualCharSequence(String value, String compareableValue);
+	public String getLongestEqualStrSequence(String value, String compareableValue);
 	
-	public List<CharSequence> getEqualCharSequences(String value, String compareableValue);
+	public List<String> getEqualStrSequences(String value, String compareableValue);
 	
 }

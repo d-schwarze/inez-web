@@ -28,6 +28,43 @@ public class SimilarityServiceImpl implements SimilarityService {
 	}
 	
 	@Override
+	public <T> List<Similarity<T>> getSimilaritiesExtensive(String value, List<T> compareableList,
+			Function<T, List<String>> getCompareableValues) {
+		
+		List<Similarity<T>> similarities = new ArrayList<>();
+		
+		for(T model : compareableList) {
+			
+			Similarity<T> similarity = this.getSimiliartyExtensive(value, model, getCompareableValues);
+			
+			similarities.add(similarity);
+			
+		}
+		
+		return similarities;
+		
+	}
+	
+	@Override
+	public <T> List<Similarity<T>> getSimiliaritiesWithMinRating(String value, List<T> compareableList,
+			Function<T, String> getCompareableValue, double minRating) {
+		
+		List<Similarity<T>> similarities = this.getSimilarities(value, compareableList, getCompareableValue);
+		
+		return similarities.stream().filter(s -> s.getRating() >= minRating).collect(Collectors.toList());
+		
+	}
+	
+	@Override
+	public <T> List<Similarity<T>> getSimiliaritiesWithMinRatingExtensive(String value, List<T> compareableList,
+			Function<T, List<String>> getCompareableValues, double minRating) {
+		
+		List<Similarity<T>> similarities = this.getSimilaritiesExtensive(value, compareableList, getCompareableValues);
+		
+		return similarities.stream().filter(s -> s.getRating() >= minRating).collect(Collectors.toList());
+	}
+	
+	@Override
 	public <T> List<Similarity<T>> getSortedSimilarities(String value, List<T> compareableList,
 			Function<T, String> getCompareableValue) {
 		
@@ -84,6 +121,24 @@ public class SimilarityServiceImpl implements SimilarityService {
 		
 		return similarity;
 		
+	}
+	
+	@Override
+	public <T> Similarity<T> getSimiliartyExtensive(String value, T compareableModel,
+			Function<T, List<String>> getCompareableValues) {
+		
+		Similarity<T> similarity = new Similarity<>();
+		
+		similarity.setModel(compareableModel);
+		
+		double rating = getCompareableValues.apply(compareableModel)
+											.stream()
+											.mapToDouble(compareableValue -> this.generateSimiliarityRating(value, compareableValue))
+											.max().orElse(0.0);
+						
+		similarity.setRating(rating);
+		
+		return similarity;
 	}
 	
 	@Override

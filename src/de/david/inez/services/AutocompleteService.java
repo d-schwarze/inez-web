@@ -8,7 +8,6 @@ public interface AutocompleteService {
 	
 	public List<Product> getSuggestions(String input);
 	
-	
-	
+	public List<Product> getBestSuggestions(String input);	
 	
 }

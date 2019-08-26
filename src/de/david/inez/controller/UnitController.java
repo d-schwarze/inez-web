@@ -1,6 +1,7 @@
 package de.david.inez.controller;
 
 import java.util.List;
+import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -17,6 +18,7 @@ import org.springframework.web.bind.annotation.RestController;
 import de.david.inez.models.SpecialUnit;
 import de.david.inez.models.Unit;
 import de.david.inez.models.UnitSystem;
+import de.david.inez.repositories.SpecialUnitRepository;
 import de.david.inez.repositories.UnitRepository;
 import de.david.inez.repositories.UnitSystemRepository;
 
@@ -26,6 +28,9 @@ public class UnitController {
 
 	@Autowired
 	private UnitRepository unitRepository;
+	
+	@Autowired
+	private SpecialUnitRepository specialUnitRepository;
 	
 	@Autowired
 	private UnitSystemRepository unitSystemRepository;
@@ -38,10 +43,24 @@ public class UnitController {
 		
 	}
 	
+	@GetMapping("/special")
+	public List<SpecialUnit> getSpecialUnits() {
+		
+		return specialUnitRepository.findAll();
+		
+	}
+	
 	@GetMapping("/{id}")
 	public Unit getUnit(@PathVariable("id") long id) {
 		
 		return unitRepository.findById(id).get();
+		
+	}
+	
+	@GetMapping("/special/{id}")
+	public SpecialUnit getSpecialUnit(@PathVariable("id") long id) {
+		
+		return specialUnitRepository.findById(id).get();
 		
 	}
 	
@@ -53,32 +72,47 @@ public class UnitController {
 		
 	}
 	
-	@PostMapping("/add")
-	public void addUnit(@RequestBody Unit unit) {
+	@DeleteMapping("/special/{id}")
+	@ResponseStatus(HttpStatus.OK)
+	public void removeSpecialUnit(@PathVariable("id") long id) {
 		
-		unitRepository.save(unit);
+		specialUnitRepository.deleteById(id);
 		
 	}
 	
 	@PostMapping("/add")
-	public void addUnitToUnitSystem(@RequestBody Unit unit, @RequestParam("unitSystem") long unitSystemId) {
+	public void addUnitToUnitSystem(@RequestBody Unit unit, @RequestParam("unitSystem") Optional<Long> unitSystemId) {
+		
+		if(unitSystemId.isEmpty()) {
 			
-		UnitSystem us = unitSystemRepository.findById(unitSystemId).get();
-		
-		us.addUnit(unit);
-		
-		unitSystemRepository.save(us);
-		
+			unitRepository.save(unit);
+			
+		} else {
+			
+			UnitSystem us = unitSystemRepository.findById(unitSystemId.get()).get();
+			
+			us.addUnit(unit);
+			
+			unitSystemRepository.save(us);
+			
+		}
 	}
 	
-	@PostMapping("/add")
-	public void addUnitToUnitSystem(@RequestBody SpecialUnit specialUnit, @RequestParam("unitSystem") long unitSystemId) {
+	@PostMapping("/special/add")
+	public void addSpecialUnitToUnitSystem(@RequestBody SpecialUnit specialUnit, @RequestParam("unitSystem") Optional<Long> unitSystemId) {
 		
-		UnitSystem us = unitSystemRepository.findById(unitSystemId).get();
-		
-		us.addSpecialUnit(specialUnit);
-		
-		unitSystemRepository.save(us);
-		
+		if(unitSystemId.isEmpty()) {
+			
+			specialUnitRepository.save(specialUnit);
+			
+		} else {
+			
+			UnitSystem us = unitSystemRepository.findById(unitSystemId.get()).get();
+			
+			us.addSpecialUnit(specialUnit);
+			
+			unitSystemRepository.save(us);
+			
+		}
 	}
 }

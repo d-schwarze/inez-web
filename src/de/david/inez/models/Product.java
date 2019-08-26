@@ -26,8 +26,9 @@ public class Product {
 	private ProductGroup productGroup;
 	
 	@OneToOne
-	@JoinColumn(name="UNIT_ID")
-	private Unit unit;
+	@JoinColumn(name="UNITSYSTEM_ID")
+	private UnitSystem unitSystem;
+
 	
 	public Product() {
 		
@@ -56,12 +57,12 @@ public class Product {
 	public void setProductGroup(ProductGroup productGroup) {
 		this.productGroup = productGroup;
 	}
-
-	public Unit getUnit() {
-		return unit;
+	
+	public UnitSystem getUnitSystem() {
+		return unitSystem;
 	}
 
-	public void setUnit(Unit unit) {
-		this.unit = unit;
+	public void setUnitSystem(UnitSystem unitSystem) {
+		this.unitSystem = unitSystem;
 	}
 }

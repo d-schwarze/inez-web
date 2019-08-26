@@ -2,10 +2,14 @@ package de.david.inez.models;
 
 import java.util.List;
 
+import javax.persistence.CollectionTable;
+import javax.persistence.Column;
+import javax.persistence.ElementCollection;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
 
 @Entity
 public class Unit {
@@ -22,6 +26,9 @@ public class Unit {
 	 */
 	private double factorToBaseUnit;
 	
+	@ElementCollection
+	@CollectionTable(name="UnitNames", joinColumns=@JoinColumn(name="id"))
+	@Column(name="name")
 	private List<String> names;
 	
 	private String preferedName;

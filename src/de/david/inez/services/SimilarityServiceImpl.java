@@ -6,8 +6,11 @@ import java.util.function.Function;
 import java.util.function.Supplier;
 import java.util.stream.Collectors;
 
+import org.springframework.stereotype.Service;
+
 import de.david.inez.services.util.Similarity;
 
+@Service
 public class SimilarityServiceImpl implements SimilarityService {
 
 	@Override

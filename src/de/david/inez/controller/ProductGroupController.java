@@ -32,6 +32,13 @@ public class ProductGroupController {
 		
 	}
 	
+	@PostMapping
+	public List<ProductGroup> getProductGroupsByIds(@RequestBody List<Long> ids) {
+		
+		return productGroupRepository.findAllById(ids);
+		
+	}
+	
 	@CrossOrigin
 	@GetMapping("/{id}")
 	public ProductGroup getProductGroup(@PathVariable("id") long id) {

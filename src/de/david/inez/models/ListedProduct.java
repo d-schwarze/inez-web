@@ -5,6 +5,7 @@ import javax.persistence.Entity;
 @Entity
 public class ListedProduct extends Product {
 	
+	
 	private double prize;
 	
 	public ListedProduct() {

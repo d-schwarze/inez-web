@@ -11,6 +11,7 @@ public class ProductEntry extends Entry {
 	@JoinColumn(name = "PRODUCT_ID")
 	private Product product;
 	
+	
 	public ProductEntry() {	
 		
 	}

@@ -1,9 +1,12 @@
 package de.david.inez.services.test;
 
+import static org.hamcrest.CoreMatchers.not;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 import java.util.List;
 
+import org.hamcrest.MatcherAssert;
+import org.hamcrest.collection.IsEmptyCollection;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -16,36 +19,34 @@ import de.david.inez.models.Product;
 import de.david.inez.repositories.ListedProductRepository;
 import de.david.inez.repositories.ProductRepository;
 import de.david.inez.services.ProductService;
-import de.david.inez.services.SimilarityService;
 import de.david.inez.services.SuggestionService;
 import de.david.inez.services.SuggestionServiceImpl;
+import de.david.inez.services.similarity.SimilarityService;
 
 @ExtendWith(SpringExtension.class)
 @SpringBootTest
 public class SuggestionServiceTest {
-	
-	@MockBean
-	private ProductService productService;
-	
-	@MockBean
-	private SimilarityService similarityService;
-	
-	@MockBean
-	private ProductRepository productRepository;
-	
-	@MockBean
-	private ListedProductRepository listedProductRepository;
 	
 	@Autowired
 	private SuggestionService suggestionService;
 	
 	@Test
 	@DisplayName("Example Service should work!")
-	void exampleServiceShouldWork() {
+	void testGetBestSuggestions() {
 		
-		List<Product> products = suggestionService.getBestSuggestions("Milch");
+		List<Product> products = suggestionService.getBestSuggestions("1l Milch");
 		
-		System.out.println(products.size());
+		MatcherAssert.assertThat(products, not(IsEmptyCollection.empty()));
+		
+	}
+	
+	@Test
+	@DisplayName("Example Service should work!")
+	void testGetSuggestions() {
+		
+		List<Product> products = suggestionService.getSuggestions("1l Milch");
+		
+		MatcherAssert.assertThat(products, not(IsEmptyCollection.empty()));
 		
 	}
 	

@@ -1,4 +1,4 @@
-package de.david.inez.services;
+package de.david.inez.services.similarity;
 
 import java.util.List;
 import java.util.function.Function;
@@ -14,9 +14,13 @@ public interface SimilarityService {
 	
 	public <T> List<Similarity<T>> getHighestSimilarites(String value, List<T> compareableList, Function<T, String> getCompareableValue, int maxAmount);
 	
+	public <T> List<Similarity<T>> getHighestSimilaritesExtensive(String value, List<T> compareableList, Function<T, List<String>> getCompareableValues, int maxAmount);
+	
 	public <T> Similarity<T> getHighestSimilarity(String value, List<T> compareableList, Function<T, String> getCompareableValue);
 	
 	public <T> List<Similarity<T>> getSortedSimilarities(String value, List<T> compareableList, Function<T, String> getCompareableValue);
+	
+	public <T> List<Similarity<T>> getSortedSimilaritiesExtensive(String value, List<T> compareableList, Function<T, List<String>> getCompareableValues);
 	
 	public <T> Similarity<T> getSimiliarty(String value, T compareableModel, Function<T, String> getCompareableValue);
 	
@@ -25,14 +29,6 @@ public interface SimilarityService {
 	public <T> List<Similarity<T>> getSimiliaritiesWithMinRating(String value, List<T> compareableList, Function<T, String> getCompareableValue, double minRating);
 	
 	public <T> List<Similarity<T>> getSimiliaritiesWithMinRatingExtensive(String value, List<T> compareableList, Function<T, List<String>> getCompareableValues, double minRating);
-	
-	public boolean equals(String value, String compareableValue);
-	
-	public int getAmountOfEqualLetters(String value, String compareableValue);
-	
-	public String getLongestEqualStrSequence(String value, String compareableValue);
-	
-	public List<String> getEqualStrSequences(String value, String compareableValue);
 	
 	public double generateSimiliarityRating(String value, String compareableValue);
 	

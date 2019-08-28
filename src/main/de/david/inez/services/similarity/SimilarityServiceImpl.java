@@ -1,14 +1,15 @@
-package de.david.inez.services;
+package de.david.inez.services.similarity;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.function.Function;
-import java.util.function.Supplier;
-import java.util.stream.Collectors;
 
 import org.springframework.stereotype.Service;
 
 import de.david.inez.services.util.Similarity;
+import de.david.inez.services.util.SimilarityUtil;
+
+import static de.david.inez.services.util.SimilarityUtil.*;
 
 @Service
 public class SimilarityServiceImpl implements SimilarityService {
@@ -54,7 +55,7 @@ public class SimilarityServiceImpl implements SimilarityService {
 		
 		List<Similarity<T>> similarities = this.getSimilarities(value, compareableList, getCompareableValue);
 		
-		return similarities.stream().filter(s -> s.getRating() >= minRating).collect(Collectors.toList());
+		return filterByMinRating(similarities, minRating);
 		
 	}
 	
@@ -64,7 +65,7 @@ public class SimilarityServiceImpl implements SimilarityService {
 		
 		List<Similarity<T>> similarities = this.getSimilaritiesExtensive(value, compareableList, getCompareableValues);
 		
-		return similarities.stream().filter(s -> s.getRating() >= minRating).collect(Collectors.toList());
+		return filterByMinRating(similarities, minRating);
 	}
 	
 	@Override
@@ -73,17 +74,21 @@ public class SimilarityServiceImpl implements SimilarityService {
 		
 		List<Similarity<T>> similarities = this.getSimilarities(value, compareableList, getCompareableValue);
 		
-		similarities.sort((Similarity<T> m1, Similarity<T> m2) -> {
-			
-			if(m1.getRating() > m2.getRating()) return 1;
-			
-			if(m1.getRating() == m2.getRating()) return 0;
-			
-			return -1;
-			
-		});
+		sort(similarities);
 		
 		return similarities;
+	}
+	
+	@Override
+	public <T> List<Similarity<T>> getSortedSimilaritiesExtensive(String value, List<T> compareableList,
+			Function<T, List<String>> getCompareableValues) {
+		
+		List<Similarity<T>> similarities = this.getSimilaritiesExtensive(value, compareableList, getCompareableValues);
+		
+		sort(similarities);
+		
+		return similarities;
+		
 	}
 
 	@Override
@@ -92,12 +97,17 @@ public class SimilarityServiceImpl implements SimilarityService {
 		
 		List<Similarity<T>> sortedSimilarities = this.getSortedSimilarities(value, compareableList, getCompareableValue);
 		
-		if(sortedSimilarities.size() == 0 || maxAmount == 0) return sortedSimilarities;
+		return highest(sortedSimilarities, maxAmount);
 		
-		int toIndex = sortedSimilarities.size() >= maxAmount ? maxAmount : (sortedSimilarities.size() - 1);
+	}
+	
+	@Override
+	public <T> List<Similarity<T>> getHighestSimilaritesExtensive(String value, List<T> compareableList,
+			Function<T, List<String>> getCompareableValues, int maxAmount) {
 		
-		return sortedSimilarities.subList(0, toIndex);
+		List<Similarity<T>> sortedSimilarities = this.getSortedSimilaritiesExtensive(value, compareableList, getCompareableValues);
 		
+		return highest(sortedSimilarities, maxAmount);
 	}
 	
 	@Override
@@ -148,15 +158,15 @@ public class SimilarityServiceImpl implements SimilarityService {
 	@Override
 	public double generateSimiliarityRating(String value, String compareableValue) {
 		
-		if(this.equals(value, compareableValue)) return 100.00;
+		if(SimilarityUtil.equals(value, compareableValue)) return 100.00;
 		
 		double rating = 0.0;
 		
-		rating += 20.0 * ((double) this.getAmountOfEqualLetters(value, compareableValue) / (double) value.length()); 
+		rating += 20.0 * ((double) getAmountOfEqualLetters(value, compareableValue) / (double) value.length()); 
 		
-		rating += 35.0 * ((double) this.generateStrSequencesRating(value, this.getEqualStrSequences(value, compareableValue)));
+		rating += 35.0 * ((double) this.generateStrSequencesRating(value, getEqualStrSequences(value, compareableValue)));
 		
-		rating += 45.0 * ((double) this.getLongestEqualStrSequence(value, compareableValue).length() / (double) value.length());
+		rating += 45.0 * ((double) getLongestEqualStrSequence(value, compareableValue).length() / (double) value.length());
 		
 		if(value.length() < compareableValue.length())
 			rating *= (((double) value.length() / (double) compareableValue.length()) + ((1.0 - (double) value.length() / (double) compareableValue.length()) * Math.exp((double) (compareableValue.length() - value.length()) * -0.7)));
@@ -178,121 +188,5 @@ public class SimilarityServiceImpl implements SimilarityService {
 		
 	}
 
-	@Override
-	public boolean equals(String value, String compareableValue) {
-
-		return value.equals(compareableValue);
-		
-	}
-
-	@Override
-	public int getAmountOfEqualLetters(String value, String compareableValue) {
-		
-		int amountOfEqualLetters = 0;
-		
-		for(String s : compareableValue.split("")) {
-			
-			if(value.contains(s)) amountOfEqualLetters++;
-			
-		}
-		
-		return amountOfEqualLetters;
-		
-	}
-
-	@Override
-	public String getLongestEqualStrSequence(String value, String compareableValue) {
-		
-		List<String> strSequences = getEqualStrSequences(value, compareableValue);
-		
-		return strSequences.stream().max((String s1, String s2) -> {
-			
-			if(s1.length() > s2.length()) return 1;
-			
-			if(s1.length() == s2.length()) return 0;
-			
-			return -1;
-			
-		}).orElse("");
-	}
-
-	@Override
-	public List<String> getEqualStrSequences(String value, String compareableValue) {
-		
-		List<String> strSequences = new ArrayList<>();
-		
-		for(int i = 0; i < compareableValue.length(); i++) {
-			
-			strSequences.addAll(this.getPossibleStrSequences(i, compareableValue, value));
-			
-		}
-		
-		this.removeDuplicates(strSequences);
-		
-		return strSequences;
-		
-	}
 	
-	public List<String> getPossibleStrSequences(int indexCompareableValue, String compareableValue, String value) {
-		
-		List<String> strSequences = new ArrayList<>();
-		
-		for(int index : this.getIndexes(compareableValue.charAt(indexCompareableValue), value)) {
-			
-			String strSeq = getEqualStrSequence(index, value, indexCompareableValue, compareableValue);
-			
-			if(strSeq.length() > 1)
-				strSequences.add(strSeq);
-			
-		}
-		
-		return strSequences;
-		
-	}
-	
-	private List<Integer> getIndexes(char c, String value) {
-		
-		List<Integer> indexes = new ArrayList<>();
-		
-		int lastIndex = value.indexOf(c);
-		
-		while(lastIndex != -1) {
-			
-			indexes.add(lastIndex);
-			
-			lastIndex = value.indexOf(c, lastIndex + 1);
-			
-		} 
-		
-		return indexes;
-		
-	}
-	
-	private String getEqualStrSequence(int indexValue, String value, int indexCompareableValue, String compareableValue) {
-		
-		StringBuilder seq = new StringBuilder("");
-		
-		while(value.length() > indexValue && 
-			  compareableValue.length() > indexCompareableValue &&
-			  value.charAt(indexValue) == compareableValue.charAt(indexCompareableValue)) {
-				
-			seq.append(value.charAt(indexValue));
-			
-			indexValue++;
-			indexCompareableValue++;
-			
-		}
-		
-		return seq.toString();
-		
-	}
-	
-	private void removeDuplicates(List<String> list) {
-		
-		list.removeIf(str -> {
-			
-			return list.indexOf(str) != list.lastIndexOf(str);
-			
-		});
-	}
 }

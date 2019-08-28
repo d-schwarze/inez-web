@@ -10,6 +10,7 @@ import de.david.inez.models.Numeral;
 import de.david.inez.models.NumeralClassification;
 import de.david.inez.models.Unit;
 import de.david.inez.repositories.NumeralRepository;
+import de.david.inez.services.similarity.SimilarityService;
 import de.david.inez.services.util.Similarity;
 
 public class NumberServiceImpl implements NumberService {

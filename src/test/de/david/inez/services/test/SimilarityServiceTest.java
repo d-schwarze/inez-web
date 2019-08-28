@@ -18,8 +18,11 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 
-import de.david.inez.services.SimilarityService;
+import de.david.inez.models.Product;
+import de.david.inez.repositories.ProductRepository;
+import de.david.inez.services.similarity.SimilarityService;
 import de.david.inez.services.util.Similarity;
+import de.david.inez.services.util.SimilarityUtil;
 
 @ExtendWith(SpringExtension.class)
 @SpringBootTest
@@ -27,6 +30,9 @@ public class SimilarityServiceTest {
 
 	@Autowired
 	private SimilarityService similarityService;
+	
+	@Autowired
+	private ProductRepository productRepository;
 	
 	@Test
 	@DisplayName("Example Service should work!")
@@ -71,10 +77,38 @@ public class SimilarityServiceTest {
 	}
 	
 	@Test
+	@DisplayName("testGetHighestSimilaritesWithLessCompareables")
+	public void testGetHighestSimilaritesWithLessCompareables() {
+		
+		List<String> compareableList = new ArrayList<>();
+		Collections.addAll(compareableList, "Milch", "Milchprodukt", "EDEKA Milch");
+		
+		List<Similarity<String>> similarites = similarityService.getHighestSimilarites("1l Milch", compareableList, (s) -> s, 5);
+		
+		MatcherAssert.assertThat(similarites, not(IsEmptyCollection.empty()));
+		
+		
+	}
+	
+	@Test
+	@DisplayName("testGetHighestSimilaritesWithLessCompareables")
+	public void testGetHighestSimilaritesWithProducts() {
+		
+		List<Product> compareableList = new ArrayList<>();
+		compareableList = productRepository.findAll();
+		
+		List<Similarity<Product>> similarites = similarityService.getHighestSimilarites("1l Milch", compareableList, (Product p) -> p.getName(), 5);
+		
+		MatcherAssert.assertThat(similarites, not(IsEmptyCollection.empty()));
+		
+		
+	}
+	
+	@Test
 	@DisplayName("Example Service should work!")
 	public void testGetEqualStrSequences() {
 		
-		List<String> strSequences = similarityService.getEqualStrSequences("Milch", "Schweiz");
+		List<String> strSequences = SimilarityUtil.getEqualStrSequences("Milch", "Schweiz");
 		
 		MatcherAssert.assertThat(strSequences, hasSize(1));
 		
@@ -85,7 +119,7 @@ public class SimilarityServiceTest {
 	@DisplayName("Example Service should work!")
 	public void testGenerateStrSequencesRating() {
 		
-		List<String> strSequences = similarityService.getEqualStrSequences("Milch", "1l Milch");
+		List<String> strSequences = SimilarityUtil.getEqualStrSequences("Milch", "1l Milch");
 		double rating = similarityService.generateStrSequencesRating("Milch", strSequences);
 		
 		assertEquals(1, rating);

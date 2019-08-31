@@ -12,7 +12,7 @@ import javax.persistence.OneToOne;
 public class Branch {
 
 	@Id
-	@GeneratedValue(strategy = GenerationType.AUTO)
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private long id;
 	
 	@OneToOne(cascade = CascadeType.ALL)

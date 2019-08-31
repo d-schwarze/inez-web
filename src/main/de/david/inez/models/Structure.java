@@ -13,7 +13,7 @@ import javax.persistence.OneToOne;
 public class Structure {
 	
 	@Id
-	@GeneratedValue(strategy = GenerationType.AUTO)
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private long id;
 	
 	@OneToOne(cascade = CascadeType.ALL)

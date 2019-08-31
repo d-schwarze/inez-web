@@ -33,4 +33,6 @@ public interface ShoppingListService {
 
 	public List<ShoppingList> getUndatedShoppingListsByUser(String userId);
 	
+	public List<ShoppingList> getExpiredShoppingListsByUser(String userId);
+	
 }

@@ -16,7 +16,7 @@ import javax.persistence.OneToOne;
 public class UnitSystem {
 
 	@Id
-	@GeneratedValue(strategy = GenerationType.AUTO)
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private long id;
 	
 	private String name;
@@ -33,6 +33,17 @@ public class UnitSystem {
 
 	public UnitSystem() {
 		
+	}
+	
+	public boolean containsUnit(Unit unit) {
+		
+		for(Unit u : units) {
+			
+			if(u.getId() == unit.getId()) return true;
+			
+		}
+		
+		return false;
 	}
 	
 	public Unit getBaseUnit() {

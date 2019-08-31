@@ -7,10 +7,12 @@ import java.util.function.Function;
 
 import org.springframework.stereotype.Service;
 
-import de.david.inez.services.util.Similarity;
 import de.david.inez.services.util.SimilarityUtil;
+import de.david.inez.services.util.rating.Rating;
+import de.david.inez.services.util.rating.Similarity;
 
 import static de.david.inez.services.util.SimilarityUtil.*;
+import static de.david.inez.services.util.RatingUtil.*;
 
 @Service
 public class ComplexSimilarityServiceImpl implements ComplexSimilarityService {
@@ -112,18 +114,53 @@ public class ComplexSimilarityServiceImpl implements ComplexSimilarityService {
 		
 		similarity.setModel(compareableModel);
 		
+		
 		double rating = getCompareableValues.apply(compareableModel)
 											.stream()
 											.mapToDouble(compareableValue -> this.generateSimiliarityRatingWithInputRating(input, compareableValue, externalData))
 											.max().orElse(0.0);
-						
+		
 		similarity.setRating(rating);
 		
 		return similarity;
 	}
 	
 	@Override
+	public <T> Similarity<T> getHighestSimilarityWithInputRating(String input, List<T> compareableList,
+			Function<T, String> getCompareableValue, List<String> externalData) {
+		
+		List<Similarity<T>> sortedSimilarities = this.getSortedSimilaritiesWithInputRating(input, compareableList, getCompareableValue, externalData);
+		
+		if(sortedSimilarities.size() != 0)
+			return sortedSimilarities.get(0);
+		
+		throw new IndexOutOfBoundsException("0 similarities were found. Getting the hightest similarity is not possible.");
+	}
+
+	@Override
+	public <T> List<Similarity<T>> getSimiliaritiesWithMinRatingAndInputRating(String input, List<T> compareableList,
+			Function<T, String> getCompareableValue, double minRating, List<String> externalData) {
+		
+		List<Similarity<T>> similarities = this.getSimilaritiesWithInputRating(input, compareableList, getCompareableValue, externalData);
+		
+		return filterByMinRating(similarities, minRating);
+	}
+
+	@Override
+	public <T> List<Similarity<T>> getSimiliaritiesWithMinRatingExtensiveAndInputRating(String input,
+			List<T> compareableList, Function<T, List<String>> getCompareableValues, double minRating,
+			List<String> externalData) {
+		
+		List<Similarity<T>> similarities = this.getSimilaritiesExtensiveWithInputRating(input, compareableList, getCompareableValues, externalData);
+		
+		return filterByMinRating(similarities, minRating);
+		
+	}
+	
+	@Override
 	public double generateSimiliarityRatingWithInputRating(String input, String compareableValue, List<String> externalData) {
+		input = input.toLowerCase();
+		compareableValue = compareableValue.toLowerCase();
 		
 		if(SimilarityUtil.equals(input, compareableValue)) return 100.00;
 		
@@ -173,7 +210,7 @@ public class ComplexSimilarityServiceImpl implements ComplexSimilarityService {
 	
 	private double getRatingForEqualStrSequences(double ratingShare, String input, String compareableValue, double[] inputRating) {
 		
-		List<String> equalStrSequences = getEqualStrSequences(input, compareableValue);
+		List<String> equalStrSequences = getEqualStrSequences(input, compareableValue, false);
 		
 		double sequencesRating = 1.0;
 		
@@ -183,7 +220,7 @@ public class ComplexSimilarityServiceImpl implements ComplexSimilarityService {
 			
 		}
 		
-		double rating = (1 - (equalStrSequences.size() / sequencesRating)) * ratingShare;
+		double rating = ((double) sequencesRating / input.length()) * ratingShare;
 		
 		return rating;
 		
@@ -222,7 +259,7 @@ public class ComplexSimilarityServiceImpl implements ComplexSimilarityService {
 	}
 	
 	
-	private double[] getInputRating(String input, List<String> externalData) {
+	public double[] getInputRating(String input, List<String> externalData) {
 		
 		double[] inputRating = new double[input.length()];
 		Arrays.fill(inputRating, 1.0);
@@ -236,6 +273,8 @@ public class ComplexSimilarityServiceImpl implements ComplexSimilarityService {
 
 	private void generateInputRating(double[] inputRating, String input, List<String> externalData) {
 		
+		if(externalData == null) return;
+		
 		for(String value : externalData) {
 			
 			adjustInputRating(inputRating, input, value);
@@ -247,11 +286,11 @@ public class ComplexSimilarityServiceImpl implements ComplexSimilarityService {
 		
 		adjustInputRatingByEquality(inputRating, 0.2, input, compareableValue);
 		
-		adjustInputRatingByEqualLetters(inputRating, 0.9, input, compareableValue);
+		adjustInputRatingByEqualLetters(inputRating, 0.98, input, compareableValue);
 		
-		adjustInputRatingByStrSequences(inputRating, 0.7, input, compareableValue);
+		adjustInputRatingByStrSequences(inputRating, 0.5, input, compareableValue);
 		
-		adjustInputRatingByLongestSequence(inputRating, 0.6, input, compareableValue);
+		adjustInputRatingByLongestSequence(inputRating, 0.4, input, compareableValue);
 		
 	}
 	
@@ -265,7 +304,7 @@ public class ComplexSimilarityServiceImpl implements ComplexSimilarityService {
 
 	private void adjustInputRatingByStrSequences(double[] inputRating, double factor, String input, String compareableValue) {
 		
-		List<String> equalSequences = getEqualStrSequences(input, compareableValue);
+		List<String> equalSequences = getEqualStrSequences(input, compareableValue, false);
 		
 		for(String equalSeq : equalSequences) {
 			
@@ -278,7 +317,7 @@ public class ComplexSimilarityServiceImpl implements ComplexSimilarityService {
 		
 		int lastIndex = input.indexOf(sequence);
 		
-		while(lastIndex != -1) {
+		while(lastIndex != -1 && lastIndex < input.length() && !sequence.equals("")) {
 			
 			adjustInputRatingByFactorAndIndexes(inputRating, factor, lastIndex, lastIndex + sequence.length());
 			
@@ -297,7 +336,7 @@ public class ComplexSimilarityServiceImpl implements ComplexSimilarityService {
 
 	private void adjustInputRatingByEquality(double[] inputRating, double factor, String input, String compareableValue) {
 		
-		if(SimilarityUtil.equals(input, input)) adjustCompleteInputRatingByFactor(inputRating, factor);
+		if(SimilarityUtil.equals(input, compareableValue)) adjustCompleteInputRatingByFactor(inputRating, factor);
 		
 	}
 	

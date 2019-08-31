@@ -1,5 +1,8 @@
 package de.david.inez.models;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
@@ -9,6 +12,7 @@ import javax.persistence.Id;
 import javax.persistence.Inheritance;
 import javax.persistence.InheritanceType;
 import javax.persistence.JoinColumn;
+import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 
 @Entity
@@ -16,10 +20,14 @@ import javax.persistence.OneToOne;
 public class Product {
 
 	@Id
-	@GeneratedValue(strategy = GenerationType.AUTO)
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private long id;
 	
-	private String name;
+	@OneToOne
+	private Name preferedName;
+	
+	@OneToMany
+	private List<Name> synonyms = new ArrayList<>();
 	
 	@OneToOne
 	@JoinColumn(name="PRODUCTGROUP_ID")
@@ -32,6 +40,14 @@ public class Product {
 	public Product() {
 		
 	}
+	
+	public Product(Name preferedName, List<Name> synonyms, ProductGroup productGroup, UnitSystem unitSystem) {
+		this.setPreferedName(preferedName);
+		this.setProductGroup(productGroup);
+		this.setUnitSystem(unitSystem);
+		this.setSynonyms(synonyms);
+		
+	}
 
 	public long getId() {
 		return id;
@@ -39,14 +55,6 @@ public class Product {
 
 	public void setId(long id) {
 		this.id = id;
-	}
-
-	public String getName() {
-		return name;
-	}
-
-	public void setName(String name) {
-		this.name = name;
 	}
 
 	public ProductGroup getProductGroup() {
@@ -64,4 +72,41 @@ public class Product {
 	public void setUnitSystem(UnitSystem unitSystem) {
 		this.unitSystem = unitSystem;
 	}
+
+	public Name getPreferedName() {
+		return preferedName;
+	}
+
+	public void setPreferedName(Name preferedName) {
+		this.preferedName = preferedName;
+	}
+
+	public List<Name> getSynonyms() {
+		return synonyms;
+	}
+
+	public void setSynonyms(List<Name> synonyms) {
+		this.synonyms = synonyms;
+	}
+	
+	public List<String> getAllNames() {
+		
+		List<String> names = new ArrayList<>();
+		
+		for(Name pn : this.synonyms) {
+			
+			if(!names.contains(pn.getSingular())) names.add(pn.getSingular());
+			
+			if(!names.contains(pn.getPlural())) names.add(pn.getPlural());
+			
+		}
+		
+		if(!names.contains(preferedName.getSingular())) names.add(preferedName.getSingular());
+		
+		if(!names.contains(preferedName.getPlural())) names.add(preferedName.getPlural());
+		
+		return names;
+		
+	}
+	
 }

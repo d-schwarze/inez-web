@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import de.david.inez.models.Product;
+import de.david.inez.models.ProductEntry;
 import de.david.inez.services.SuggestionService;
 
 @RestController
@@ -20,16 +21,17 @@ public class SuggestionController {
 	private SuggestionService suggestionService;
 	
 	@GetMapping
-	public List<Product> getBestSuggestedProducts(@RequestParam("input") String input) {
+	public List<ProductEntry> getBestSuggestedProductEntries(@RequestParam("input") String input) {
 		
-		return suggestionService.getBestSuggestions(input);
+		return suggestionService.getBestSuggestedProductEntries(input);
 		
 	}
 	
 	@GetMapping("/all")
-	public List<Product> getSuggestedProducts(@RequestParam("input") String input) {
+	public List<ProductEntry> getSuggestedProductEntries(@RequestParam("input") String input) {
 		
-		return suggestionService.getSuggestions(input);
+		return suggestionService.getSuggestedProductEntries(input);
 		
 	}
+	
 }

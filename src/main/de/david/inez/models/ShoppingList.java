@@ -12,16 +12,23 @@ import javax.persistence.JoinColumn;
 import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 
+import org.springframework.format.annotation.DateTimeFormat;
+
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
+
+import de.david.inez.controller.util.CustomJsonDateDeserializer;
+
 @Entity
 public class ShoppingList {
 
 	@Id
-	@GeneratedValue(strategy = GenerationType.AUTO)
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private long id;
 	
 	private String userId;
 	
-	private LocalDate date;
+	@JsonDeserialize(using = CustomJsonDateDeserializer.class)
+	public LocalDate date;
 	
 	@OneToOne
 	@JoinColumn(name = "SUBSIDIARY_ID")
@@ -31,6 +38,8 @@ public class ShoppingList {
 	private List<Entry> entries;
 	
 	private boolean pinned = false;
+	
+	private String name;
 	
 	public ShoppingList() { }
 	
@@ -47,6 +56,7 @@ public class ShoppingList {
 		return date;
 	}
 
+	@JsonDeserialize(using = CustomJsonDateDeserializer.class)
 	public void setDate(LocalDate date) {
 		this.date = date;
 	}
@@ -81,5 +91,15 @@ public class ShoppingList {
 
 	public void setPinned(boolean pinned) {
 		this.pinned = pinned;
+	}
+
+
+	public String getName() {
+		return name;
+	}
+
+
+	public void setName(String name) {
+		this.name = name;
 	}
 }

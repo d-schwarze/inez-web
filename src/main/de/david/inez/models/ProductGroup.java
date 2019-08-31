@@ -9,13 +9,19 @@ import javax.persistence.Id;
 public class ProductGroup {
 	
 	@Id
-	@GeneratedValue(strategy = GenerationType.AUTO)
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private long id;
 	
 	private String designation;
 	
 	public ProductGroup() { }
 
+	public ProductGroup(String designation) {
+		
+		this.setDesignation(designation);
+		
+	}
+	
 	public long getId() {
 		return id;
 	}

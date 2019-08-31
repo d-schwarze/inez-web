@@ -14,7 +14,7 @@ import javax.persistence.OneToMany;
 public class OrderedGrouping {
 
 	@Id
-	@GeneratedValue(strategy = GenerationType.AUTO)
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private long id;
 	
 	@OneToMany(cascade = CascadeType.ALL)

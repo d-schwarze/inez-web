@@ -18,11 +18,14 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 
+import de.david.inez.models.Name;
 import de.david.inez.models.Product;
+import de.david.inez.models.Unit;
+import de.david.inez.models.UnitSystem;
 import de.david.inez.repositories.ProductRepository;
 import de.david.inez.services.similarity.SimilarityService;
-import de.david.inez.services.util.Similarity;
 import de.david.inez.services.util.SimilarityUtil;
+import de.david.inez.services.util.rating.Similarity;
 
 @ExtendWith(SpringExtension.class)
 @SpringBootTest
@@ -35,7 +38,53 @@ public class SimilarityServiceTest {
 	private ProductRepository productRepository;
 	
 	@Test
-	@DisplayName("Example Service should work!")
+	@DisplayName("Testing unit ratings.")
+	public void testGetProductSimilarities() {
+		UnitSystem us = new UnitSystem();
+		us.setName("Volumen");
+		
+		Unit unit1 = new Unit();
+		unit1.setId(1L);
+		unit1.setFactorToBaseUnit(1.0);
+		ArrayList<Name> names = new ArrayList<>();
+		names.add(new Name("Liter"));
+		names.add(new Name("l"));
+		unit1.setNames(names);
+		unit1.setPreferedName(new Name("Liter"));
+		
+		Unit unit2 = new Unit();
+		unit1.setId(2L);
+		unit2.setFactorToBaseUnit(1.0);
+		names = new ArrayList<>();
+		names.add(new Name("ml"));
+		names.add(new Name("Millilter"));
+		unit2.setNames(names);
+		unit2.setPreferedName(new Name("Milliter"));
+		
+		us.addUnit(unit1);
+		us.addUnit(unit2);
+		
+		
+		Product p1 = new Product(new Name("EDEKA Milch"), new ArrayList<>(), null, us);
+		Product p2 = new Product(new Name("Milch"), new ArrayList<>(), null, us);
+		
+		List<Product> products = List.of(p1, p2);
+		
+		List<Similarity<Product>> similarites = similarityService.getSimilaritiesExtensive("1ml Milch", products, (Product p) -> p.getAllNames());
+		
+		MatcherAssert.assertThat(similarites, not(IsEmptyCollection.empty()));
+		
+		for(Similarity<Product> s : similarites) {
+			
+			System.out.println("Name: " + s.getModel().getPreferedName().getSingular());
+			System.out.println("Rating: " + s.getRating());
+			System.out.println("----------");
+			
+		}
+	}
+	
+	@Test
+	@DisplayName("Testing similarity functionality")
 	public void testGetSimilarities() {
 		
 		List<String> compareableList = new ArrayList<>();
@@ -45,11 +94,17 @@ public class SimilarityServiceTest {
 		
 		MatcherAssert.assertThat(similarites, not(IsEmptyCollection.empty()));
 		
-		
+		for(Similarity<String> s : similarites) {
+			
+			System.out.println("Name: " + s.getModel());
+			System.out.println("Rating: " + s.getRating());
+			System.out.println("----------");
+			
+		}
 	}
 	
 	@Test
-	@DisplayName("Example Service should work!")
+	@DisplayName("Testing sorted similarities")
 	public void testGetSortedSimilarities() {
 		
 		List<String> compareableList = new ArrayList<>();
@@ -59,11 +114,17 @@ public class SimilarityServiceTest {
 		
 		MatcherAssert.assertThat(similarites, not(IsEmptyCollection.empty()));
 		
-		
+		for(Similarity<String> s : similarites) {
+			
+			System.out.println("Name: " + s.getModel());
+			System.out.println("Rating: " + s.getRating());
+			System.out.println("----------");
+			
+		}
 	}
 	
 	@Test
-	@DisplayName("Example Service should work!")
+	@DisplayName("Testing highest similarities")
 	public void testGetHighestSimilarites() {
 		
 		List<String> compareableList = new ArrayList<>();
@@ -71,13 +132,19 @@ public class SimilarityServiceTest {
 		
 		List<Similarity<String>> similarites = similarityService.getHighestSimilarites("1l Milch", compareableList, (s) -> s, 5);
 		
-		MatcherAssert.assertThat(similarites, not(IsEmptyCollection.empty()));
+		MatcherAssert.assertThat(similarites, hasSize(5));
 		
-		
+		for(Similarity<String> s : similarites) {
+			
+			System.out.println("Name: " + s.getModel());
+			System.out.println("Rating: " + s.getRating());
+			System.out.println("----------");
+			
+		}
 	}
 	
 	@Test
-	@DisplayName("testGetHighestSimilaritesWithLessCompareables")
+	@DisplayName("Testing highest similarities with less items then the limit")
 	public void testGetHighestSimilaritesWithLessCompareables() {
 		
 		List<String> compareableList = new ArrayList<>();
@@ -85,46 +152,31 @@ public class SimilarityServiceTest {
 		
 		List<Similarity<String>> similarites = similarityService.getHighestSimilarites("1l Milch", compareableList, (s) -> s, 5);
 		
-		MatcherAssert.assertThat(similarites, not(IsEmptyCollection.empty()));
+		MatcherAssert.assertThat(similarites, hasSize(3));
 		
-		
+		for(Similarity<String> s : similarites) {
+			
+			System.out.println("Name: " + s.getModel());
+			System.out.println("Rating: " + s.getRating());
+			System.out.println("----------");
+			
+		}
 	}
 	
 	@Test
-	@DisplayName("testGetHighestSimilaritesWithLessCompareables")
-	public void testGetHighestSimilaritesWithProducts() {
-		
-		List<Product> compareableList = new ArrayList<>();
-		compareableList = productRepository.findAll();
-		
-		List<Similarity<Product>> similarites = similarityService.getHighestSimilarites("1l Milch", compareableList, (Product p) -> p.getName(), 5);
-		
-		MatcherAssert.assertThat(similarites, not(IsEmptyCollection.empty()));
-		
-		
-	}
-	
-	@Test
-	@DisplayName("Example Service should work!")
+	@DisplayName("Testing equal string sequences")
 	public void testGetEqualStrSequences() {
 		
-		List<String> strSequences = SimilarityUtil.getEqualStrSequences("Milch", "Schweiz");
+		List<String> strSequences = SimilarityUtil.getEqualStrSequences("Milch", "Schweiz", true);
 		
 		MatcherAssert.assertThat(strSequences, hasSize(1));
 		
-		
-	}
-	
-	@Test
-	@DisplayName("Example Service should work!")
-	public void testGenerateStrSequencesRating() {
-		
-		List<String> strSequences = SimilarityUtil.getEqualStrSequences("Milch", "1l Milch");
-		double rating = similarityService.generateStrSequencesRating("Milch", strSequences);
-		
-		assertEquals(1, rating);
-		
-		
+		for(String s : strSequences) {
+			
+			System.out.println("Seq: " + s);
+			System.out.println("----------");
+			
+		}
 	}
 	
 }

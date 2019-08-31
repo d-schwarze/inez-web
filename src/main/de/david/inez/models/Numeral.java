@@ -11,12 +11,13 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
+import javax.persistence.Transient;
 
 @Entity
 public class Numeral {
 
 	@Id
-	@GeneratedValue(strategy = GenerationType.AUTO)
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private long id;
 	
 	private double numericValue;
@@ -28,6 +29,8 @@ public class Numeral {
 	
 	private NumeralClassification numeralClassification;
 	
+	@Transient
+	private String foundValue;
 	
 	public Numeral() { }
 
@@ -61,5 +64,13 @@ public class Numeral {
 
 	public void setNumeralClassification(NumeralClassification numeralClassification) {
 		this.numeralClassification = numeralClassification;
+	}
+
+	public String getFoundValue() {
+		return foundValue;
+	}
+
+	public void setFoundValue(String foundValue) {
+		this.foundValue = foundValue;
 	}
 }

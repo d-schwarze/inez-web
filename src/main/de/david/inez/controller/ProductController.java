@@ -54,7 +54,7 @@ public class ProductController {
 	@PostMapping("/add")
 	@ResponseStatus(HttpStatus.CREATED)
 	public void addProduct(@RequestBody Product product) {
-		
+		System.out.println(product.getUnitSystem());
 		productService.addProduct(product);
 		
 	}

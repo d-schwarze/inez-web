@@ -3,7 +3,7 @@ package de.david.inez.services.similarity;
 import java.util.List;
 import java.util.function.Function;
 
-import de.david.inez.services.util.Similarity;
+import de.david.inez.services.util.rating.Similarity;
 
 public interface ComplexSimilarityService {
 
@@ -23,6 +23,14 @@ public interface ComplexSimilarityService {
 	
 	public <T> Similarity<T> getSimiliartyExtensiveWithInputRating(String input, T compareableModel, Function<T, List<String>> getCompareableValues, List<String> externalData);
 	
+	public <T> Similarity<T> getHighestSimilarityWithInputRating(String input, List<T> compareableList, Function<T, String> getCompareableValue, List<String> externalData);
+	
+	public <T> List<Similarity<T>> getSimiliaritiesWithMinRatingAndInputRating(String input, List<T> compareableList, Function<T, String> getCompareableValue, double minRating, List<String> externalData);
+	
+	public <T> List<Similarity<T>> getSimiliaritiesWithMinRatingExtensiveAndInputRating(String input, List<T> compareableList, Function<T, List<String>> getCompareableValues, double minRating, List<String> externalData);
+	
 	public double generateSimiliarityRatingWithInputRating(String input, String compareableValue, List<String> externalData);
+	
+	public double[] getInputRating(String input, List<String> externalData);
 	
 }

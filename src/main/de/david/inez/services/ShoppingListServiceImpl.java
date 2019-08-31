@@ -28,22 +28,19 @@ public class ShoppingListServiceImpl implements ShoppingListService {
 	@Override
 	public List<ShoppingList> getShoppingListsByUser(String userId) {
 		
-		ShoppingList exampleList = new ShoppingList();
-		exampleList.setUserId(userId);
-		
-		return shoppingListRepo.findAll(Example.of(exampleList));
+		return shoppingListRepo.findAll()
+			   				   .stream()
+		   				   	   .filter(sl -> sl.getUserId().equals(userId))
+		   				   	   .collect(Collectors.toList());
 		
 	}
 	
 	@Override
 	public List<ShoppingList> getComingShoppingListsByUser(String userId) {
 		
-		ShoppingList exampleList = new ShoppingList();
-		exampleList.setUserId(userId);
-		
-		return shoppingListRepo.findAll(Example.of(exampleList))
+		return shoppingListRepo.findAll()
 							   .stream()
-							   .filter(sl -> sl.getDate() != null && sl.getDate().isAfter(LocalDate.now()))
+							   .filter(sl -> sl.getUserId().equals(userId) && sl.getDate() != null && sl.getDate().isAfter(LocalDate.now()))
 							   .collect(Collectors.toList());
 		
 	}
@@ -51,14 +48,20 @@ public class ShoppingListServiceImpl implements ShoppingListService {
 	@Override
 	public List<ShoppingList> getUndatedShoppingListsByUser(String userId) {
 		
-		ShoppingList exampleList = new ShoppingList();
-		exampleList.setUserId(userId);
-		
-		return shoppingListRepo.findAll(Example.of(exampleList))
+		return shoppingListRepo.findAll()
 							   .stream()
-							   .filter(sl -> sl.getDate() == null)
+							   .filter(sl -> sl.getUserId().equals(userId) && sl.getDate() == null)
 							   .collect(Collectors.toList());
 		
+	}
+	
+	@Override
+	public List<ShoppingList> getExpiredShoppingListsByUser(String userId) {
+		
+		return shoppingListRepo.findAll()
+							   .stream()
+							   .filter(sl -> sl.getUserId().equals(userId) && sl.getDate() != null && sl.getDate().isBefore(LocalDate.now()))
+							   .collect(Collectors.toList());
 	}
 
 	@Override
@@ -132,11 +135,7 @@ public class ShoppingListServiceImpl implements ShoppingListService {
 
 	public boolean userHasShoppingList(long shoppingListId, String userId) {
 		
-		ShoppingList exampleList = new ShoppingList();
-		exampleList.setId(shoppingListId);
-		exampleList.setUserId(userId);
-		
-		return shoppingListRepo.exists(Example.of(exampleList));
+		return shoppingListRepo.findById(shoppingListId).filter(p -> p.getUserId().equals(userId)).isPresent();
 		
 	}
 

@@ -11,7 +11,7 @@ import javax.persistence.OneToOne;
 public class OrderedGroup {
 
 	@Id
-	@GeneratedValue(strategy = GenerationType.AUTO)
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private long id;
 	
 	private int orderNumber;

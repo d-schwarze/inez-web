@@ -82,14 +82,14 @@ public class UnitController {
 	
 	@PostMapping("/add")
 	public void addUnit(@RequestBody Unit unit) {
-		System.out.print(unit.getPreferedName());
+		
 		unitRepository.save(unit);
 			
 	}
 	
 	@PostMapping(path = "/add", params = { "unitSystem" })
 	public void addUnitToUnitSystem(@RequestBody Unit unit, @RequestParam("unitSystem") Optional<Long> unitSystemId) {
-		System.out.print(unit);
+		
 		UnitSystem us = unitSystemRepository.findById(unitSystemId.get()).get();
 			
 		us.addUnit(unit);

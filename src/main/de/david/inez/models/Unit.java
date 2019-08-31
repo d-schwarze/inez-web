@@ -1,8 +1,11 @@
 package de.david.inez.models;
 
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 
+import javax.persistence.CascadeType;
 import javax.persistence.CollectionTable;
 import javax.persistence.Column;
 import javax.persistence.ElementCollection;
@@ -11,12 +14,13 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
+import javax.persistence.OneToOne;
 
 @Entity
 public class Unit {
 
 	@Id
-	@GeneratedValue(strategy = GenerationType.AUTO)
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private long id;
 	
 	/**
@@ -30,11 +34,20 @@ public class Unit {
 	@ElementCollection
 	@CollectionTable(name="UnitNames", joinColumns=@JoinColumn(name="id"))
 	@Column(name="name")
-	private List<String> names = new ArrayList<>();
+	private List<Name> names = new ArrayList<>();
 	
-	private String preferedName;
+	@OneToOne
+	private Name preferedName;
 	
 	public Unit() { }
+	
+	public Unit(Name preferedName, double factorToBaseUnit, Name... names) {
+		
+		this.setPreferedName(preferedName);
+		this.setFactorToBaseUnit(factorToBaseUnit);
+		this.setNames(Arrays.asList(names));
+		
+	}
 
 	public long getId() {
 		return id;
@@ -52,22 +65,23 @@ public class Unit {
 		this.factorToBaseUnit = factorToBaseUnit;
 	}
 
-	public List<String> getNames() {
+	public List<Name> getNames() {
 		return names;
 	}
 
-	public void setNames(List<String> names) {
-		if(this.preferedName != null && !names.contains(this.preferedName))
-			names.add(this.preferedName);
+	public void setNames(List<Name> names) {
 		
 		this.names = names;
+		
+		//if(this.preferedName != null && !this.names.contains(this.preferedName))
+			//this.names.add(this.preferedName);
 	}
 
-	public String getPreferedName() {
+	public Name getPreferedName() {
 		return preferedName;
 	}
 
-	public void setPreferedName(String preferedName) {
+	public void setPreferedName(Name preferedName) {
 		if(!this.names.contains(preferedName))
 			this.names.add(preferedName);
 		
@@ -84,6 +98,22 @@ public class Unit {
 		if(((Unit) otherUnit).getId() == this.id) return true;
 		
 		return false;
+		
+	}
+	
+	public List<String> getAllNames() {
+		
+		List<String> names = new ArrayList<>();
+		
+		for(Name pn : this.names) {
+			
+			if(!names.contains(pn.getSingular())) names.add(pn.getSingular());
+			
+			if(!names.contains(pn.getPlural())) names.add(pn.getPlural());
+			
+		}
+		
+		return names;
 		
 	}
 }

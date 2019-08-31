@@ -108,7 +108,7 @@ public class SimilarityUtil {
 	
 	public static String getLongestEqualStrSequence(String value, String compareableValue) {
 		
-		List<String> strSequences = getEqualStrSequences(value, compareableValue);
+		List<String> strSequences = getEqualStrSequences(value, compareableValue, true);
 		
 		return strSequences.stream().max((String s1, String s2) -> {
 			
@@ -121,7 +121,7 @@ public class SimilarityUtil {
 		}).orElse("");
 	}
 
-	public static List<String> getEqualStrSequences(String value, String compareableValue) {
+	public static List<String> getEqualStrSequences(String value, String compareableValue, boolean withWhitespaces) {
 		
 		List<String> strSequences = new ArrayList<>();
 		
@@ -131,48 +131,76 @@ public class SimilarityUtil {
 			
 		}
 		
+		if(!withWhitespaces)
+			removeWhitespaces(strSequences);
+		
 		removeDuplicates(strSequences);
+		//Possibibily: Compareablevalue: Milch, Value: 1l Milch -> equal seq: Milch, ilch, lch, ch -> too much -> remove ilch, lch, ch
+		//Something like: Compareablevalue: Milch, value: Mi2ch -> equal seq: Mi, ch should only be possible
+		removeInnerSequences(strSequences);
 		
 		return strSequences;
 		
 	}
 	
-	public static <T> void sort(List<Similarity<T>> similarities) {
+	public static void removeInnerSequences(List<String> sequences) {
 		
-		similarities.sort((Similarity<T> m1, Similarity<T> m2) -> {
-			
-			if(m1.getRating() < m2.getRating()) return 1;
-			
-			if(m1.getRating() > m2.getRating()) return -1;
-			
-			return 0;
-			
-		});
-	}
-	
-	public static <T> List<Similarity<T>> filterByMinRating(List<Similarity<T>> similarities, double minRating) {
-		
-		return similarities.stream().filter(s -> s.getRating() >= minRating).collect(Collectors.toList());
+		sequences.removeIf(seq -> sequencesContain(seq, sequences));
 		
 	}
 	
-	public static double getSum(double[] list, int fromIndex, int toIndex) {
+	public static boolean sequencesContain(String sequence, List<String> sequences) {
+		
+		for(String s : sequences) {
+			
+			if(!s.equals(sequence) && s.contains(sequence)) return true;
+			
+		}
+		
+		return false;
+		
+	}
+	
+	public static void removeWhitespaces(List<String> sequences) {
+		
+		for(String seq : sequences) {
+			
+			seq.replace(" ", "");
+			
+		}
+		
+		for(int i = 0; i < sequences.size(); i++) {
+			String seq = sequences.get(i);
+			
+			String newSeq = seq.replace(" ", "");
+			
+			sequences.set(i, newSeq);
+			
+			
+		}
+		
+	}
+	
+	public static double getSum(double[] list, int fromIndex, int length) {
 		
 		double sum = 0.0;
 		
-		for(int i = fromIndex; i < toIndex; i++) sum += list[i];
+		for(int i = fromIndex; i < (fromIndex + length); i++) sum += list[i];
 		
 		return sum;
 		
 	}
 	
-	public static <T> List<Similarity<T>> highest(List<Similarity<T>> similarities, int maxAmount) {
+	public static String containsAny(String value, List<String> compareableValues) {
 		
-		if(similarities.size() == 0 || maxAmount == 0) return similarities;
+		for(String s : compareableValues) {
+			
+			if(value.toLowerCase().contains(s.toLowerCase() + " ")) return s;
+			if(value.toLowerCase().contains(" " + s.toLowerCase())) return s;
+			
+		}
 		
-		int toIndex = similarities.size() >= maxAmount ? maxAmount : similarities.size();
-		
-		return similarities.subList(0, toIndex);
+		return null;
 		
 	}
 	

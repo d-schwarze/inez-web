@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<body>
+    <head>
+        <style>
+            body {
+                
+                padding: 0;
+                margin: 0;
+                
+            }
+            
+            h2 {
+                
+                font-weight: 500;
+                
+            }
+            
+            h3 {
+                
+                font-weight: 500;
+                
+            }
+            
+            body {
+                
+            
+                
+            }
+            
+            header {
+                
+                display: flex;
+                flex-direction: row;
+                align-items: center;
+                padding: 15px;
+                border-bottom: 1px solid lightgrey;
+                
+            }
+            
+            header img {
+                
+                margin-right: 30px;
+                
+            }
+            
+            #content {
+                
+                padding: 25px;
+                
+            }
+            
+            
+        </style>
+    </head>
+    <body>
+        <header>
+            <h2>README</h2>
+        </header>
+        <div id="content">
+            <h3>1. Installation</h3>
+            <p>Prinzipielle ist das ganze Projekt bisher noch nicht in einem finalen deploybaren Zustand. Ich hatte einfach bisher keine Zeit mich damit auseinanderzusetzen. Aber alle Funktionen können zumindest in den Testumgebungen von Ionic und Spring Boot verwendet werden.</p>
+            <h4>Inez-Ionic</h4>
+            <p>Ist eine PWA. Warum? Siehe <i>IONIC-PWA</i></p>
+            <p>Um die PWA zu deployen wird NPM und Node.js benötigt: Auf <i>https://nodejs.org/en/</i> node.js runterladen und installieren.</p>
+            <p>Dann wird noch Ionic benötigt: dafür in der Konsole <i>npm install -g ionic</i></p>
+            <h4>Um die APP zustarten:</h4>
+            <p>In der Konsole zum Root-Ordner (inez-ionic) navigieren und dann <i>ionic serve</i> eingeben. Zuvor sollte man <i>npm update</i> machen um sie die Packages reinzuladen (im Root-Ordner). Alternativ kann man <i>ionic serve --devapp</i> eingeben und die APP <i>Ionic Dev App</i> runterladen. In ihr kann man die APP direkt auf dem Smartphone testen.</p>
+            <p></p>
+            <h4>Inez-Web</h4>
+            <p>Variante 1: Projekt in Eclipse (oder andere IDE, aber ohne Gewähr) importieren als Maven Projekt und <i>de.david.inez.Application</i> als Java Application ausführen</p>
+            <h3>2. Allgemeine Architektur</h3>
+            <p>Das Programm teilt sich in zwei Parts auf. Einmal die Backend mit verschiedenen Services und Datenspeicherung, die praktisch auf ein einem Server laufen sollte. Zum anderen gibt es die Frontend, die mit <i>Ionic</i> geschrieben wurde. Also eine PWA. Als APP und Webapp nutzbar.</p>
+            <br>
+            <table width="100%">
+                <thead>
+                    <tr>
+                        <th>
+                            FRONTEND
+                        </th>
+                        <th>
+                            BACKEND
+                        </th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td width="50%">
+                            <div>
+                                IONIC-PWA<br>
+                                App als auch Webapp<br>
+                                Die Nutzung als APP ist vorgesehen und wurde bevorzugt in der Entwicklung. Zwar sind native Apps verboten, aber da es sich hierbei um eine progressive Web App handelt und somit plattformunabhänig ist (egal ob Android, IOS oder ein Browser) habe ich mich trotzdem für diesen Fokus entschieden, da nach meiner Ansicht ein Einkaufslisten-Service nur als APP wirklich Verwendung findet und sinnvoll ist.<br>
+                                In der App kann die IP-Adresse des Backend-Servers eingestellt werden. Wenn das Projekt auf einem Rechner läuft, kann man einfach <i>localhost:8080</i> verwend (Port ist immer 8080).
+                            </div>
+                        </td>
+                        <td width="50%">
+                            <div>
+                                Basierend auf Spring<br>
+                                Spring Boot um das Projekt schneller zu starten. Produtiv nicht sinnvoll, aber für diesen Zweck durchaus angemessen.<br>
+                                Rest-Webservice als Schnittstelle zur Frontend<br>
+                                Spring JPA und Derby für die Datenspeicherung<br>
+                                INEZ-Web besitzt bereits eine vorabe initialisiert Derby DB mit Beispiel-Werten im Ordner <i>mydb</i>. Wenn man ihn löscht muss man die Daten im Admin-Bereich neu einpflegen (siehe Admin-Bereich).
+                            </div>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+            <h3>3. Features | Was kanns?</h3>
+            <ul>
+                <li>Einkaufsliste erstellen</li>
+                <li>Einkaufsliste in einer Datenbank speichern</li>
+                <li>Vorschläge zu einem eingeben Wert</li>
+                <p>--> Produkte, Einheiten und Wert</p>
+            </ul>
+            <h3>4. Was sollte es können, kanns aber nicht?</h3>
+            <ul>
+                <li>Markt (Branch) für eine Liste auswählen und die Einträge nach der Produktgruppe (ProductGroup) sortieren. Jeder <i>Branch</i> eine eigene Reihenfolge an Produktgruppen die die Struktur des Marktes in echt nachahmt und somit kann man die Einträge danach sotieren. Alles ist bisher vorhanden nur die UI wurde nicht nicht fertig und das Feature wurde rausgenommen. Die Backend Progammierung ist noch drinnen aber nicht vollständige. Branches mit einem <i>OrderedGrouping</i> können aber schon im Admin-Bereich erstellt werden.</li>
+            </ul>
+            <h3>5. Autocomplete und Co</h3>
+            <p>Das Programm besitzt ein Vorschlagsystem, das zu einem <i>Input</i> Vorschläge macht und dabei auf Rating setzt.</p>
+            <h4>5.1 Vorteile des Vorschlagsystems:</h4>
+            <ul>
+                <li>
+                    Erkennung von verschiedenen Objekte aus der Datenbank im Inputstring. Z.B. Produkte, Einheiten, Numeral etc.
+                </li>
+                <li>
+                    Tippfehler werden durch das Rating ausgemerzt.
+                </li>
+            </ul>
+            <h4>5.2 Aufbau der Vorschlagsystems</h4>
+            <p>Das System nutzt den <i>SimilairtyService</i>. Dieser erstellt für eine Satz an Daten ein Rating für den mitgegeben Inputstring. Näheres später.</p>
+            <p>Das System kann unterschiedliche Klassen erkennen und dadurch die eingegben Werte anpassen. Z.B. andere Namen für die Einheit ausgeben oder an das Einheitensystem anpassen sowie Produktnamen korrigieren und Preise ausgeben. Da ein Produkt einen <i>Name</i> besitzt der über die Werte Singular & Plural verfügt wird der Produktname je nach Anzahl angepasst. Das gilt auch für Einheiten (Unit). Z.B. ein Kasten oder zwei Kästen.</p>
+            <h4>5.3 Der SimilarityService</h4>
+            <p>Dieser Service ist eine Kernfunktion von meiner INEZ-Variante. Ausgehenden von Datensätzen können diese Datensätze nach Ähnlichkeiten in den String bewertet werden.</p>
+            <p>Es gibt zwei Versionen:</p>
+            <ul>
+                <li>SimilarityService</li>
+                <li>ComplextSimilartiyService</li>
+            </ul>
+            <h4>5.4 SimilarityService</h4>
+            <p>Einfache Version. Gibt ein einfaches Rating ab für eine <i>compareableValue</i> und dem <i>Input</i>. Baut auf dem ComplexSimilarityService auf.</p>
+            <h4>5.5 ComplexSimilarityVersion</h4>
+            <p>Dieser Service macht prinzipiell das gleiche wie der SimilarityService mit nur einem Unterschied. Er bezieht neben dem Standardrating noch weiter externe Daten mit ein. Beispielsweise soll die das Rating für verschiede Units erstellt werden. Aber der Inputstring bestitz auch ein Produkt. Nur werden die Produkte aus der Datenbank als externe Daten verwedent um die einzelnen Buchstaben des Inputstirngs zu bewerten. Also wie sehr sie von den exteren Daten verwendet werden. So sollte das erste "l" in <i>1l Milch</i> für eine Unit wesentlich wichtiger sein, als das in "Milch". Das vorgezogene InputRating sorgt dafür (InputRating wird nur bei Units gemacht).</p>
+            <h4>5.6 Rating</h4>
+            <p>Ratingkriterien</p>
+            <ul>
+                <li>Anzahl der gleichen Buchstaben</li>
+                <li>Gleiche Buchstabensequenzen</li>
+                <li>Längste Buchstatensequenz</li>
+                <li>Vergleich der Länge der Texte</li>
+            </ul>
+            <h4>5.7 NumberService</h4>
+            <p>Der NumberService erkennt Zahlen und Zahlworte und kann diese sogar durch Mutliplikation verbinden. Z.B: 2 Paar... -> 4</p>
+            <p>Die Zahlen und Zahlworte bekommen auch Ratings und die besten werden ausgewählt. Prinzipiell haben Zahlen Priorität und die Zahlworte richten sich nach ihnen, wenn vorhanden.</p>
+            <h4>5.8 UnitSystem</h4>
+            <p>Ein UnitSystem ist z.B. das Volumen mit den Units Lister, Milliliter etc. Eine Unit kann dabei einen bevorzugten Namen (Singular & Plural) besitzten und weiter Namen/Synonyme nach denen auch gesucht wird. Beim Etrag wird dann der bevorzugte Name ausgegeben.</p>
+            <h3>6. Admin-Bereich</h3>
+            <p>Kleines Extra um Testwerte schnell zu erstellen. Zu Beachten ist, dass es sich dabei um eine sehr simple Version handelt. D.h. man muss exakt arbeiten und hauptsächlich über Ids. Also müssen referenzierte Werte zu erste Erstellt werden.</p>
+            <h5>Schema</h5>
+            <p>Names -> ProductGroups -> Units -> UnitSytems -> Products/ListedProducts</p>
+        </div>
+    </body>
+</body>

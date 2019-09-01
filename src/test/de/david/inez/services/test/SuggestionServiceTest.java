@@ -1,14 +1,12 @@
 package de.david.inez.services.test;
 
 import static org.hamcrest.CoreMatchers.not;
-import static org.junit.jupiter.api.Assertions.assertEquals;
 
 import java.util.ArrayList;
 import java.util.List;
 
 import org.hamcrest.MatcherAssert;
 import org.hamcrest.collection.IsEmptyCollection;
-import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -23,16 +21,11 @@ import de.david.inez.models.ProductEntry;
 import de.david.inez.models.ProductGroup;
 import de.david.inez.models.Unit;
 import de.david.inez.models.UnitSystem;
-import de.david.inez.repositories.ListedProductRepository;
 import de.david.inez.repositories.ProductGroupRepository;
 import de.david.inez.repositories.ProductRepository;
 import de.david.inez.repositories.UnitRepository;
 import de.david.inez.repositories.UnitSystemRepository;
-import de.david.inez.services.ProductService;
 import de.david.inez.services.SuggestionService;
-import de.david.inez.services.SuggestionServiceImpl;
-import de.david.inez.services.similarity.SimilarityService;
-import de.david.inez.services.util.rating.Suggestion;
 
 @ExtendWith(SpringExtension.class)
 @SpringBootTest

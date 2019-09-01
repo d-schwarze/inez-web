@@ -11,17 +11,12 @@ import org.hamcrest.collection.IsEmptyCollection;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.Mock;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 
 import de.david.inez.models.Name;
-import de.david.inez.models.Product;
-import de.david.inez.models.ProductGroup;
 import de.david.inez.models.Unit;
-import de.david.inez.models.UnitSystem;
-import de.david.inez.repositories.UnitRepository;
 import de.david.inez.services.similarity.ComplexSimilarityService;
 import de.david.inez.services.util.rating.Similarity;
 

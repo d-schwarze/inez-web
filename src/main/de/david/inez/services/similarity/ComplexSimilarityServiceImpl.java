@@ -8,7 +8,6 @@ import java.util.function.Function;
 import org.springframework.stereotype.Service;
 
 import de.david.inez.services.util.SimilarityUtil;
-import de.david.inez.services.util.rating.Rating;
 import de.david.inez.services.util.rating.Similarity;
 
 import static de.david.inez.services.util.SimilarityUtil.*;
@@ -342,7 +341,7 @@ public class ComplexSimilarityServiceImpl implements ComplexSimilarityService {
 	
 	private void adjustCompleteInputRatingByFactor(double[] inputRating, double factor) {
 		
-		for(var i = 0; i < inputRating.length; i++) inputRating[i] = inputRating[i] * factor;
+		for(int i = 0; i < inputRating.length; i++) inputRating[i] = inputRating[i] * factor;
 		
 	}
 	

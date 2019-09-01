@@ -1,7 +1,5 @@
 package de.david.inez.models;
 
-import java.util.ArrayDeque;
-
 import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;

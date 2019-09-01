@@ -1,18 +1,12 @@
 package de.david.inez.services.similarity;
 
-import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 import java.util.function.Function;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import de.david.inez.services.util.SimilarityUtil;
-import de.david.inez.services.util.rating.Rating;
 import de.david.inez.services.util.rating.Similarity;
-
-import static de.david.inez.services.util.SimilarityUtil.*;
 
 @Service
 public class SimilarityServiceImpl implements SimilarityService {

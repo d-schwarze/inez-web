@@ -13,7 +13,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
-import de.david.inez.models.Unit;
 import de.david.inez.models.UnitSystem;
 import de.david.inez.repositories.UnitSystemRepository;
 

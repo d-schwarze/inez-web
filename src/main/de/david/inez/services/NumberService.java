@@ -2,10 +2,8 @@ package de.david.inez.services;
 
 import java.util.List;
 
-import de.david.inez.models.Numeral;
 import de.david.inez.services.util.StringNumber;
 import de.david.inez.services.util.rating.NumberRating;
-import de.david.inez.services.util.rating.Rating;
 
 public interface NumberService {
 

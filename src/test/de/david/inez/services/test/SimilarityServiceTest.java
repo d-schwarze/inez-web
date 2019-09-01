@@ -2,7 +2,6 @@ package de.david.inez.services.test;
 
 import static org.hamcrest.CoreMatchers.*;
 import static org.hamcrest.collection.IsCollectionWithSize.hasSize;
-import static org.junit.jupiter.api.Assertions.assertEquals;
 
 import org.hamcrest.collection.IsEmptyCollection;
 
@@ -22,7 +21,6 @@ import de.david.inez.models.Name;
 import de.david.inez.models.Product;
 import de.david.inez.models.Unit;
 import de.david.inez.models.UnitSystem;
-import de.david.inez.repositories.ProductRepository;
 import de.david.inez.services.similarity.SimilarityService;
 import de.david.inez.services.util.SimilarityUtil;
 import de.david.inez.services.util.rating.Similarity;
@@ -33,9 +31,6 @@ public class SimilarityServiceTest {
 
 	@Autowired
 	private SimilarityService similarityService;
-	
-	@Autowired
-	private ProductRepository productRepository;
 	
 	@Test
 	@DisplayName("Testing unit ratings.")

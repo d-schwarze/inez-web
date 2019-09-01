@@ -2,7 +2,6 @@ package de.david.inez.services.util.rating;
 
 import de.david.inez.models.Product;
 import de.david.inez.models.Unit;
-import de.david.inez.models.UnitSystem;
 
 public class Suggestion extends ReadableRating {
 	
